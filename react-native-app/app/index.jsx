@@ -1,17 +1,29 @@
-import { ImageBackground, StyleSheet } from "react-native";
+import { ImageBackground, StyleSheet, View } from "react-native";
 import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
-import MenuButton from "../components/MenuButton";
 
-const Home = () => (
-	<SafeAreaProvider>
-		<SafeAreaView style={styles.container} edges={["left", "right"]}>
-			<ImageBackground source={require("../assets/background.png")} resizeMode="cover" style={styles.image}>
-				<MenuButton text="PLAY"></MenuButton>
-				<MenuButton text="OPTIONS"></MenuButton>
-			</ImageBackground>
-		</SafeAreaView>
-	</SafeAreaProvider>
-);
+import { images, icons } from "../constants";
+
+import { MenuButton, RoundButton } from "../components";
+
+const Home = () => {
+	return (
+		<SafeAreaProvider>
+			<SafeAreaView style={styles.container} edges={["left", "right"]}>
+				<ImageBackground source={images.background} resizeMode="cover" style={styles.image}>
+					<View style={styles.topButtons}>
+						<RoundButton href={""} icon={icons.settings}></RoundButton>
+						<RoundButton href={""} icon={icons.volume}></RoundButton>
+					</View>
+					<View style={styles.buttons}>
+						<MenuButton text="PLAY" href={"/game"}></MenuButton>
+						<MenuButton text="HOST" href={""}></MenuButton>
+						<MenuButton text="PRACTICE" href={""}></MenuButton>
+					</View>
+				</ImageBackground>
+			</SafeAreaView>
+		</SafeAreaProvider>
+	);
+};
 
 const styles = StyleSheet.create({
 	container: {
@@ -19,8 +31,23 @@ const styles = StyleSheet.create({
 	},
 	image: {
 		flex: 1,
-		justifyContent: "center",
+		justifyContent: "space-between",
 		alignItems: "center",
+	},
+	topButtons: {
+		paddingHorizontal: "5%",
+		display: "flex",
+		flexDirection: "row",
+		justifyContent: "space-between",
+		alignItems: "center",
+		width: "100%",
+		height: 90,
+	},
+	buttons: {
+		display: "flex",
+		justifyContent: "flex-start",
+		alignItems: "center",
+		width: "100%",
 	},
 });
 

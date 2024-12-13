@@ -1,32 +1,31 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Text } from "react-native";
 import { Link } from "expo-router";
 
 const MenuButton = (props) => {
 	return (
-		<View style={styles.menuButton}>
-			<Link style={styles.menuText} href={"/game"}>
-				{props.text}
-			</Link>
-		</View>
+		<Link style={styles.button} href={props.href}>
+			<Text style={styles.text}>{props.text}</Text>
+		</Link>
 	);
 };
 
 export default MenuButton;
 
 const styles = StyleSheet.create({
-	menuButton: {
+	button: {
 		width: "80%",
 		backgroundColor: "#353535",
 		paddingVertical: 8,
 		paddingHorizontal: 80,
 		borderRadius: 100,
 		boxShadow: "0 0 10px white",
+		marginBottom: 40,
 	},
-	menuText: {
+	text: {
 		textAlign: "center",
 		color: "white",
-		fontSize: 42,
-		lineHeight: 84,
+		fontSize: 35,
+		lineHeight: 65,
 		fontWeight: "bold",
 	},
 });
