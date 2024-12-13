@@ -1,10 +1,10 @@
-import { StyleSheet, Text } from "react-native";
+import { StyleSheet, Text, View, Button } from "react-native";
 import { Link } from "expo-router";
 
 const MenuButton = (props) => {
 	return (
-		<Link style={styles.button} href={props.href}>
-			<Text style={styles.text}>{props.text}</Text>
+		<Link className="w-4/5 bg-grey-primary py-7 px-20 rounded-full mb-12" style={styles.shadow} href={props.href}>
+			<Text className="text-center text-4xl font-bold text-white">{props.text}</Text>
 		</Link>
 	);
 };
@@ -12,20 +12,7 @@ const MenuButton = (props) => {
 export default MenuButton;
 
 const styles = StyleSheet.create({
-	button: {
-		width: "80%",
-		backgroundColor: "#353535",
-		paddingVertical: 8,
-		paddingHorizontal: 80,
-		borderRadius: 100,
+	shadow: {
 		boxShadow: "0 0 10px white",
-		marginBottom: 40,
-	},
-	text: {
-		textAlign: "center",
-		color: "white",
-		fontSize: 35,
-		lineHeight: 65,
-		fontWeight: "bold",
 	},
 });

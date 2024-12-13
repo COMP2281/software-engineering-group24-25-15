@@ -3,7 +3,7 @@ import { Link } from "expo-router";
 
 const RoundButton = (props) => {
 	return (
-		<Link style={styles.button} href={props.href}>
+		<Link className="w-14 h-14 bg-grey-primary p-4 rounded-full" style={styles.shadow} href={props.href}>
 			<Image source={props.icon} />
 		</Link>
 	);
@@ -12,12 +12,7 @@ const RoundButton = (props) => {
 export default RoundButton;
 
 const styles = StyleSheet.create({
-	button: {
-		width: 60,
-		height: 60,
-		backgroundColor: "#353535",
-		padding: 15,
-		borderRadius: 100,
+	shadow: {
 		boxShadow: "0 0 10px white",
 	},
 });
