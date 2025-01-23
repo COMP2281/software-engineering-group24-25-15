@@ -16,6 +16,9 @@ module.exports = {
 				500: "#111928",
 				800: "#0A0E1B",
 			},
+			red: {
+				200: "#FFD6D6",
+			},
 			gradient: {
 				primary: "linear-gradient(90deg, hsla(185, 100%, 98%, 1) 0%, hsla(205, 30%, 54%, 1) 55%, hsla(226, 46%, 7%, 1) 100%);",
 			},
