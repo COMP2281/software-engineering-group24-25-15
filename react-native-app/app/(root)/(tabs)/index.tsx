@@ -1,5 +1,4 @@
-import { ImageBackground, View, TouchableOpacity, Text, Image } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { ImageBackground, View, TouchableOpacity, Text } from "react-native";
 
 import images from "@/constants/images";
 
@@ -20,7 +19,7 @@ const MenuButton = ({ text, onPress }: MenuButtonProps) => {
 
 export default function Index() {
 	return (
-		<SafeAreaView>
+		<View>
 			<ImageBackground source={images.mainBackground} className="w-full h-full" resizeMode="cover" />
 			<View className="absolute h-full w-full top-0 flex items-center justify-center pt-32">
 				<View className="w-full h-1/3 flex justify-center items-center">
@@ -31,6 +30,6 @@ export default function Index() {
 					<MenuButton text="Practise" />
 				</View>
 			</View>
-		</SafeAreaView>
+		</View>
 	);
 }

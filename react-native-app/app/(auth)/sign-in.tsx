@@ -1,5 +1,4 @@
 import { View, Text, ImageBackground, TextInput, TouchableOpacity } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
@@ -16,7 +15,7 @@ const SignIn = () => {
 	};
 
 	return (
-		<SafeAreaView className="flex-1">
+		<View className="flex-1">
 			<ImageBackground source={images.mainBackground} className="w-full h-full" resizeMode="cover" />
 			<View className="absolute flex justify-center items-center w-full h-full">
 				<Text className="text-5xl font-righteous text-grey-200 uppercase mb-6">Logo</Text>
@@ -66,7 +65,7 @@ const SignIn = () => {
 					<Text className="text-blue-100 font-righteous">Sign Up</Text>
 				</TouchableOpacity>
 			</View>
-		</SafeAreaView>
+		</View>
 	);
 };
 

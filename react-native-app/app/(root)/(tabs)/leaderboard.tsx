@@ -1,10 +1,11 @@
-import { View, Text } from "react-native";
-import React from "react";
+import { View, Text, ImageBackground } from "react-native";
+
+import images from "@/constants/images";
 
 const Leaderboard = () => {
 	return (
-		<View>
-			<Text>Leaderboard</Text>
+		<View className="flex-1">
+			<ImageBackground source={images.subBackground} className="w-full h-full" resizeMode="cover" />
 		</View>
 	);
 };

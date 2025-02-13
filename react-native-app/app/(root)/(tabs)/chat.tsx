@@ -1,5 +1,4 @@
 import { View, Text, ImageBackground, TextInput, TouchableOpacity, Image, ScrollView } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { useState, useRef } from "react";
 
 import images from "@/constants/images";
@@ -47,8 +46,8 @@ const AIChat = () => {
 	};
 
 	return (
-		<SafeAreaView className="flex-1">
-			<ImageBackground source={images.aiBackground} className="w-full h-full" resizeMode="cover">
+		<View className="flex-1">
+			<ImageBackground source={images.subBackground} className="w-full h-full" resizeMode="cover">
 				<View className="absolute h-full w-full flex">
 					<ScrollView
 						ref={scrollViewRef}
@@ -79,7 +78,7 @@ const AIChat = () => {
 					</View>
 				</View>
 			</ImageBackground>
-		</SafeAreaView>
+		</View>
 	);
 };
 
