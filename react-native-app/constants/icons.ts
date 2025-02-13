@@ -5,6 +5,7 @@ import play from "@/assets/icons/play.png";
 import chat from "@/assets/icons/chat.png";
 import leaderboard from "@/assets/icons/leaderboard.png";
 import stats from "@/assets/icons/statistics.png";
+import addFriend from "@/assets/icons/add-friend.png";
 
 export default {
 	back,
@@ -14,4 +15,5 @@ export default {
 	chat,
 	leaderboard,
 	stats,
+	addFriend,
 };

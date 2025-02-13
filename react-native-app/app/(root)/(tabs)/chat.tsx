@@ -9,15 +9,13 @@ interface Message {
 	isUser: boolean;
 }
 
-const MessageBubble = ({ text, isUser }: Message) => {
-	return (
-		<View className={`flex flex-row ${isUser ? "justify-end" : "justify-start"} mb-4`}>
-			<View className={`px-4 py-3 rounded-2xl max-w-[80%] ${isUser ? "bg-gray-700" : "bg-blue-100"}`}>
-				<Text className="text-grey-200 font-righteous">{text}</Text>
-			</View>
+const MessageBubble = ({ text, isUser }: Message) => (
+	<View className={`flex flex-row ${isUser ? "justify-end" : "justify-start"} mb-4`}>
+		<View className={`px-4 py-3 rounded-2xl max-w-[80%] ${isUser ? "bg-gray-700" : "bg-blue-100"}`}>
+			<Text className="text-grey-200 font-righteous">{text}</Text>
 		</View>
-	);
-};
+	</View>
+);
 
 const AIChat = () => {
 	const [inputMessage, setInputMessage] = useState("");
