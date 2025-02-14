@@ -15,9 +15,18 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
+from accounts.views import ActivateUserView
+from accounts.views import CustomPasswordResetView
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
+    # Place custom endpoints before the Djoser URLs
+    path('auth/users/activate/<uid>/<token>/', ActivateUserView.as_view(), name='user-activate'),
+    path('auth/users/custom_reset_password/', CustomPasswordResetView.as_view(), name='custom-reset-password'),
+    re_path(r'^auth/', include('djoser.urls')),
+    re_path(r'^auth/', include('djoser.urls.jwt')),
 ]
+
