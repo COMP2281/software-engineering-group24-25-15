@@ -72,7 +72,7 @@ const Leaderboard = () => {
 					<View className="flex-row justify-between items-center px-4 py-6">
 						<Text className="text-white text-3xl font-righteous">Leaderboard</Text>
 						<TouchableOpacity onPress={() => {}} className="mr-4">
-							<Image source={icons.addFriend} className="size-6" />
+							<Image source={icons.addFriend} className="size-6" tintColor={"#fff"} />
 						</TouchableOpacity>
 					</View>
 					<View className="flex-row bg-transparent">
