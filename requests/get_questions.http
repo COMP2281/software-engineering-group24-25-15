@@ -1,0 +1,11 @@
+GET http://127.0.0.1:8000/game/questions/
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM5OTkzNzMyLCJpYXQiOjE3Mzk5NzU3MzIsImp0aSI6IjUzNzk4ZjUzNzVmZjQ3ODRhOTRlM2VlM2Q2MjBjZGRmIiwidXNlcl9pZCI6MzZ9.cK8-Xe2_1BJPS73i8aug3v2zMG_kz-H2dQwJijysYM0
+Content-Type: application/json
+
+{
+    "category": "Cyber Security",
+    "n": 4,
+    "hint": true
+}
+
+

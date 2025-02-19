@@ -28,5 +28,7 @@ urlpatterns = [
     path('auth/users/custom_reset_password/', CustomPasswordResetView.as_view(), name='custom-reset-password'),
     re_path(r'^auth/', include('djoser.urls')),
     re_path(r'^auth/', include('djoser.urls.jwt')),
+
+    path('game/', include('game.urls')),
 ]
 

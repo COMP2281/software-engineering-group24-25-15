@@ -1,0 +1,36 @@
+xtekky/ gpt4free
+0.4.3.5
+g4f v0.4.3.5
+on GitHub
+Release Notes for GPT4Free Version v0.4.3.5
+Release Date: January 28, 2025
+Key Updates:
+Addressed Issue #2628 :
+Refactor parsing logic for improved handling of reasoning content
+Commit: 2591781
+Added AsyncAuthedProvider in Copilot :
+Enhanced the Copilot integration with asynchronous authenticated providers.
+Commit: 9524c3f
+Added Model qwen-2.5-1m-demo to models.py :
+Included a new model in the models.py file for demonstration purposes.
+Commit: 17d2f05
+Fixed Unittests and Set Strategy for Rate Limiter :
+Addressed issues with unittests and implemented a new strategy for rate limiting.
+Commit: 2c89583
+Added PreviewResponse Type to Response Types :
+Introduced a new type for preview responses.
+Commit: d4f736e
+Support for Options Like max_depth in downloads.json :
+Added support for various options, including max_depth , in the downloads.json file.
+Commit: efacc15
+New Contributors
+@SreejiBR made their first contribution in #2630
+Full Changelog : 0.4.3.4...0.4.3.5
+Don't miss a new gpt4free release
+NewReleases is sending notifications on new releases.
+© 2025 NewReleases
+About
+News
+Contact
+Terms of Service
+Privacy Policy

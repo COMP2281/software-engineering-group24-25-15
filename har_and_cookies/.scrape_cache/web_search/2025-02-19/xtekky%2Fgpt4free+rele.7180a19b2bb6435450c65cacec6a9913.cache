@@ -1,0 +1,199 @@
+Title: xtekky/gpt4free 0.4.2.5 on GitHub - NewReleases.io
+
+xtekky/ gpt4free
+0.4.2.5
+g4f v0.4.2.5
+on GitHub
+Release Date : January 25, 2025
+New Features
+OpenaiTemplate Provider : Added support for the OpenaiTemplate provider.
+MiniMax Providers : Introduced MiniMax providers and included them in the model list.
+HailuoAI Provider : Added support for the HailuoAI provider.
+Default Vision Model : Set a default vision model for better consistency.
+Improvements
+Docker Image Update : Updated the base image of the main Docker image for improved performance and compatibility.
+Model Updates : Added MiniMax to models.py to reflect the latest supported models.
+Lock File for nodriver : Added a lock file to ensure proper handling of the nodriver setup.
+Bug Fixes
+Browser Management : Ensured the browser is properly stopped after all calls by adding a finally block.
+Unit Test Fixes : Addressed issues in unit tests for more reliable testing.
+Removals
+Deprecated Webdriver Providers : Removed outdated or unused webdriver providers to streamline functionality.
+by @hlohaus
+Full Changelog : 0.4.2.4...0.4.2.5
+Don't miss a new gpt4free release
+NewReleases is sending notifications on new releases.
+© 2025 NewReleases
+About
+News
+Contact
+Terms of Service
+Privacy Policy
+
+
+Source: [[0]](https://newreleases.io/project/github/xtekky/gpt4free/release/0.4.2.5)
+
+
+Title: xtekky/gpt4free 0.4.3.0 on GitHub - NewReleases.io
+
+xtekky/ gpt4free
+0.4.3.0
+g4f v0.4.3.0
+on GitHub
+Release Notes for Version 0.4.2.7
+Release Date: January 26, 2025
+Highlights
+This release introduces significant enhancements, optimizations, and new features to improve functionality, robustness, and user experience. Special thanks to H Lohaus for their valuable contributions.
+Key Updates and Features
+Enhancements to docker-compose
+Port Update : Added 1337:8080 to docker-compose-slim.yml and docker-compose.yml for enabling new functionalities.
+Improved compatibility and setup flexibility across all running applications.
+Provider Script Improvements
+Refactored and optimized providers such as CablyAI , Cloudflare , and DeepInfraChat to streamline inheritance and logic.
+Introduced use_nodriver attribute for enhanced customization in multiple provider classes.
+Added a format_prompt_qwen2 function to manage new prompt formats in HuggingFace.
+HuggingFaceAPI Enhancements
+Better token handling with added max_tokens and calculate_length functions for accurate token counting and input management.
+Enhanced robustness through improved handling of messages exceeding length limits.
+Streamlined model properties for better management.
+Demo Mode Features
+New demo.html file, complete with supporting CSS and JS, to enable and showcase demo functionalities.
+Updated backend to support demo mode, including functions like create_app_with_gui_and_debug and create_app_with_demo_and_debug .
+Integrated user-journey constraints for better demo tracking and usage monitoring.
+Rate Limiting
+Integrated flask_limiter for API rate limiting in demo mode, improving UI stability under public access.
+Error Handling Enhancements
+Improved edge case management by:
+Ignoring encoding errors in file uploads and web_search .
+Enhancing fault tolerance in processes.
+Code Structure and Robustness
+Numerous refactorings and fixes to improve maintainability, performance, and clarity across the codebase.
+Recommendations for Testing
+
+
+Source: [[1]](https://newreleases.io/project/github/xtekky/gpt4free/release/0.4.3.0)
+
+
+Title: gpt4free xtekky - MyGit
+
+xtekky/gpt4free
+Fork:
+13554 Star:
+63546 (更新于
+2025-02-17 10:51:57)
+license:
+GPL-3.0
+Language:
+Python .
+The official gpt4free repository | various collection of powerful language models | o3 mini and deepseek r1
+最后发布版本：
+0.4.6.1 (
+2025-02-13 01:26:25)
+官方网址
+GitHub网址
+介绍
+版本
+相关
+Written by @xtekky
+[!IMPORTANT]
+By using this repository or any code related to it, you agree to the legal notice . The author is not responsible for the usage of this repository nor endorses it , nor is the author responsible for any copies, forks, re-uploads made by other users, or anything else related to GPT4Free. This is the author's only account and repository. To prevent impersonation or irresponsible actions, please comply with the GNU GPL license this Repository uses.
+[!WARNING]
+"gpt4free" serves as a PoC (proof of concept), demonstrating the development of an API package with multi-provider requests, with features like timeouts, load balance and flow control.
+![!NOTE Latest version: Stats:](https://a1.cdn.osfipin.com/site/mygit/1px.png)
+🆕 What's New
+Explore the latest features and updates
+Find comprehensive details on our Releases Page .
+Stay updated with our Telegram Channel 📨
+Join us at telegram.me/g4f_channel .
+Subscribe to our Discord News Channel 💬🆕️
+Stay informed about updates via our News Channel: discord.gg/5E39JUWUFa .
+Get support in our Discord Community 🤝💻
+Reach out for help in our Support Group: discord.gg/qXA4Wf4Fsm .
+🔻 Site Takedown
+![Is a proof-of-concept API package for multi-provider AI requests. It showcases features such as:](https://a1.cdn.osfipin.com/site/mygit/1px.png)
+
+
+Source: [[2]](https://mygit.top/repository/620936652)
+
+
+Title: xtekky/gpt4free 0.4.3.5 on GitHub - NewReleases.io
+
+xtekky/ gpt4free
+0.4.3.5
+g4f v0.4.3.5
+on GitHub
+Release Notes for GPT4Free Version v0.4.3.5
+Release Date: January 28, 2025
+Key Updates:
+Addressed Issue #2628 :
+Refactor parsing logic for improved handling of reasoning content
+Commit: 2591781
+Added AsyncAuthedProvider in Copilot :
+Enhanced the Copilot integration with asynchronous authenticated providers.
+Commit: 9524c3f
+Added Model qwen-2.5-1m-demo to models.py :
+Included a new model in the models.py file for demonstration purposes.
+Commit: 17d2f05
+Fixed Unittests and Set Strategy for Rate Limiter :
+Addressed issues with unittests and implemented a new strategy for rate limiting.
+Commit: 2c89583
+Added PreviewResponse Type to Response Types :
+Introduced a new type for preview responses.
+Commit: d4f736e
+Support for Options Like max_depth in downloads.json :
+Added support for various options, including max_depth , in the downloads.json file.
+Commit: efacc15
+New Contributors
+@SreejiBR made their first contribution in #2630
+Full Changelog : 0.4.3.4...0.4.3.5
+Don't miss a new gpt4free release
+NewReleases is sending notifications on new releases.
+© 2025 NewReleases
+About
+News
+Contact
+Terms of Service
+Privacy Policy
+
+
+Source: [[3]](https://newreleases.io/project/github/xtekky/gpt4free/release/0.4.3.5)
+
+
+Title: 0.4.5.5 - xtekky/gpt4free - MyGit
+
+0.4.5.5
+xtekky/gpt4free
+版本发布时间: 2025-02-08 02:36:35
+xtekky/gpt4free最新发布版本: 0.4.6.1 (2025-02-13 01:26:25)
+Release Notes
+New Features
+Introduced zerogpu_uuid : A new feature added to the demo, allowing for better identification and tracking in GPU-less environments.
+FluxDev Integration : The G4F provider now supports FluxDev, enhancing the variety of models available for users.
+Improvements
+Enhanced Copy Images API : Improvements made to the Copy Images API for better performance and user experience.
+Updated Webmanifest : The webmanifest has been revised to include the latest features and optimizations.
+Bug Fixes
+Resolved "Show New Window" Button Issue : Fixed a bug that prevented the "Show New Window" button from functioning correctly.
+Exception Handling in Generate Function : Added checks to handle exceptions in the generate function, improving overall stability.
+Commits Overview
+Feb 5, 2025 :
+Added zerogpu_uuid to demo.
+Implemented exception checks in the generate function.
+Feb 6, 2025 :
+Integrated FluxDev into the G4F provider.
+Updated webmanifest and added missing imports.
+Feb 7, 2025 :
+Fixed the "Show New Window" button functionality.
+Merged pull request #2688 and added new models while enhancing provider functionality.
+What's Changed
+Add zerogpu_uuid to demo by @hlohaus in https://github.com/xtekky/gpt4free/pull/2688
+Adding New Models and Enhancing Provider Functionality by @kqlio67 in https://github.com/xtekky/gpt4free/pull/2689
+For a complete comparison of changes, please refer to the commit history here [github.com] .
+相关地址： 原始地址
+下载(tar)
+下载(zip)
+查看： 2025-02-08发行的版本
+MyGit:微信小程序
+
+
+Source: [[4]](https://mygit.top/release/199113080)

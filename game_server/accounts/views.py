@@ -16,56 +16,47 @@ from django.conf import settings
 from rest_framework import status
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import AllowAny
+from django.http import HttpResponse
 
-class RegisterView(generics.CreateAPIView):
-    serializer_class = UserRegistrationSerializer
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.save()
-        return Response({
-            "message": "User registered successfully",
-            "user": {
-                "username": user.username,
-                "email": user.email,
-                # Optionally include profile data:
-                "sex": user.profile.sex,
-                "age": user.profile.age,
-            }
-        }, status=status.HTTP_201_CREATED)
-
-
-
+User = get_user_model()
 
 
 class ActivateUserView(views.APIView):
     """Handles user activation via GET request when clicking the email link"""
-
-    token_generator = UserViewSet.token_generator  # Use Djoser’s token generator
+    token_generator = UserViewSet.token_generator  # Use Djoser's token generator
 
     def get(self, request, uid, token):
         data = {"uid": uid, "token": token}
         serializer = ActivationSerializer(data=data, context={"view": self})
         
         if serializer.is_valid():
-            # Try to get the user from the serializer's validated data
             user = serializer.validated_data.get("user")
             if user is None:
-                # If not provided, decode uid manually
+                # Decode the UID manually if not provided by the serializer
                 user_pk = decode_uid(uid)
                 try:
                     user = User.objects.get(pk=user_pk)
                 except User.DoesNotExist:
-                    return Response({"detail": "Invalid UID."}, status=status.HTTP_400_BAD_REQUEST)
-            
-            # Activate the user
+                    return HttpResponse(
+                        "Invalid UID.",
+                        status=status.HTTP_400_BAD_REQUEST,
+                        content_type="text/html"
+                    )
+            # Activate the user and save changes
             user.is_active = True
             user.save()
-            return Response({"message": "Account successfully activated"}, status=status.HTTP_204_NO_CONTENT)
+            return HttpResponse(
+                "<h1>Congratulations, your account is activated!</h1>",
+                status=status.HTTP_200_OK,
+                content_type="text/html"
+            )
         
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+        # Return an error message if activation fails
+        return HttpResponse(
+            "Activation failed: " + str(serializer.errors),
+            status=status.HTTP_400_BAD_REQUEST,
+            content_type="text/html"
+        )
 
 
 
@@ -77,7 +68,6 @@ class CustomPasswordResetView(APIView):
     authentication_classes = []  # This disables any global authentication for this view
 
     def post(self, request, *args, **kwargs):
-        print("custom password reset view")
         email = request.data.get("email")
         if not email:
             return Response({"detail": "Email is required."}, status=status.HTTP_400_BAD_REQUEST)
