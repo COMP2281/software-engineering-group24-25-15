@@ -66,12 +66,8 @@ REST_FRAMEWORK = {
 
 
 SIMPLE_JWT = {
-    << << << < HEAD
-    'AUTH_HEADER_TYPES': ('JWT',),
-    == == == =
     'AUTH_HEADER_TYPES': ('JWT',),
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=300),
-    >>>>>> > d9db5c03c71e7c2a0683c1a372ddf133401e5929
 }
 
 MIDDLEWARE = [
