@@ -27,6 +27,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:19000",  # Expo Web
+    "http://localhost:19006"   # Expo Debugger
+]
+
 
 # Application definition
 
@@ -40,9 +45,9 @@ INSTALLED_APPS = [
     'rest_framework',
 
     'accounts',
-    
+
     'djoser',
-    
+
 ]
 
 DJOSER = {
@@ -62,7 +67,7 @@ REST_FRAMEWORK = {
 
 
 SIMPLE_JWT = {
-   'AUTH_HEADER_TYPES': ('JWT',),
+    'AUTH_HEADER_TYPES': ('JWT',),
 }
 
 MIDDLEWARE = [
@@ -153,7 +158,6 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'kinderkirito@gmail.com'  # Your email
-EMAIL_HOST_PASSWORD = 'ogai crgt xbfv qmla'  # Generate an App Password in Google
+# Generate an App Password in Google
+EMAIL_HOST_PASSWORD = 'ogai crgt xbfv qmla'
 DEFAULT_FROM_EMAIL = 'kidnerkirito@gmail.com'
-
-
