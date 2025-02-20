@@ -2,7 +2,7 @@ POST http://127.0.0.1:8000/auth/users/
 Content-Type: application/json
 
 {
-    "username": "test25",
+    "username": "questionmanager",
     "email": "kirtokyni@gmail.com",
     "password": "yourpassword",
     "re_password": "yourpassword"

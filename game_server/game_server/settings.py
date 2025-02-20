@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,11 +28,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:19000",  # Expo Web
-    "http://localhost:19006"   # Expo Debugger
-]
-
 
 # Application definition
 
@@ -45,8 +41,10 @@ INSTALLED_APPS = [
     'rest_framework',
 
     'accounts',
+    'game',
 
     'djoser',
+    'import_export',
 
 ]
 
@@ -63,11 +61,17 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+
 }
 
 
 SIMPLE_JWT = {
+    << << << < HEAD
     'AUTH_HEADER_TYPES': ('JWT',),
+    == == == =
+    'AUTH_HEADER_TYPES': ('JWT',),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=300),
+    >>>>>> > d9db5c03c71e7c2a0683c1a372ddf133401e5929
 }
 
 MIDDLEWARE = [

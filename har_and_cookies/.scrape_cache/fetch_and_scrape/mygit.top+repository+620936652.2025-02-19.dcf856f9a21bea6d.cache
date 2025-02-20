@@ -1,0 +1,35 @@
+xtekky/gpt4free
+Fork:
+13554 Star:
+63546 (更新于
+2025-02-17 10:51:57)
+license:
+GPL-3.0
+Language:
+Python .
+The official gpt4free repository | various collection of powerful language models | o3 mini and deepseek r1
+最后发布版本：
+0.4.6.1 (
+2025-02-13 01:26:25)
+官方网址
+GitHub网址
+介绍
+版本
+相关
+Written by @xtekky
+[!IMPORTANT]
+By using this repository or any code related to it, you agree to the legal notice . The author is not responsible for the usage of this repository nor endorses it , nor is the author responsible for any copies, forks, re-uploads made by other users, or anything else related to GPT4Free. This is the author's only account and repository. To prevent impersonation or irresponsible actions, please comply with the GNU GPL license this Repository uses.
+[!WARNING]
+"gpt4free" serves as a PoC (proof of concept), demonstrating the development of an API package with multi-provider requests, with features like timeouts, load balance and flow control.
+![!NOTE Latest version: Stats:](https://a1.cdn.osfipin.com/site/mygit/1px.png)
+🆕 What's New
+Explore the latest features and updates
+Find comprehensive details on our Releases Page .
+Stay updated with our Telegram Channel 📨
+Join us at telegram.me/g4f_channel .
+Subscribe to our Discord News Channel 💬🆕️
+Stay informed about updates via our News Channel: discord.gg/5E39JUWUFa .
+Get support in our Discord Community 🤝💻
+Reach out for help in our Support Group: discord.gg/qXA4Wf4Fsm .
+🔻 Site Takedown
+![Is a proof-of-concept API package for multi-provider AI requests. It showcases features such as:](https://a1.cdn.osfipin.com/site/mygit/1px.png)

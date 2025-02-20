@@ -2,5 +2,5 @@ POST http://127.0.0.1:8000/auth/jwt/refresh
 Content-Type: application/json
 
 {
-    "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTczOTYzNDU5NiwiaWF0IjoxNzM5NTQ4MTk2LCJqdGkiOiIyODliMTIwNGY1NjE0Mjk2OWNiOTRmNDM5ZTVjNjhiZiIsInVzZXJfaWQiOjMxfQ.-G8rJgzdIHf1YUJmadWdZmaCGDE930tvUiAaS0R7Ta0"
+  "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTczOTYzNzAyNCwiaWF0IjoxNzM5NTUwNjI0LCJqdGkiOiIzZDE0YTk2ZWExNDI0ODFlOGZkNTI2NDY5OWM0NmYyOSIsInVzZXJfaWQiOjM2fQ.bUWNUk2gRN28jn03v3W90mp_uk4fS65InnIWo_wdnRE"
 }

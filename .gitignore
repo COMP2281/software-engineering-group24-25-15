@@ -37,4 +37,3 @@ yarn-error.*
 
 *pyc
 db.sqlite3
-\old
