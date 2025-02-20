@@ -42,10 +42,10 @@ INSTALLED_APPS = [
 
     'accounts',
     'game',
-    
+
     'djoser',
     'import_export',
-    
+
 ]
 
 DJOSER = {
@@ -61,13 +61,13 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
-    
+
 }
 
 
 SIMPLE_JWT = {
-   'AUTH_HEADER_TYPES': ('JWT',),
-   'ACCESS_TOKEN_LIFETIME': timedelta(minutes=300),
+    'AUTH_HEADER_TYPES': ('JWT',),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=300),
 }
 
 MIDDLEWARE = [
@@ -158,7 +158,6 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'kinderkirito@gmail.com'  # Your email
-EMAIL_HOST_PASSWORD = 'ogai crgt xbfv qmla'  # Generate an App Password in Google
+# Generate an App Password in Google
+EMAIL_HOST_PASSWORD = 'ogai crgt xbfv qmla'
 DEFAULT_FROM_EMAIL = 'kidnerkirito@gmail.com'
-
-
