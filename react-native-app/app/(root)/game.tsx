@@ -45,7 +45,7 @@ export default function Game() {
 		if (gameFinished) return;
 		setTimeLeft(20);
 		const interval = setInterval(() => {
-			setTimeLeft(prev => {
+			setTimeLeft((prev) => {
 				if (prev <= 1) {
 					clearInterval(interval);
 					// Time out: treat as incorrect answer and move to next question
@@ -61,7 +61,7 @@ export default function Game() {
 	// Called when timer runs out
 	const handleTimeOut = () => {
 		if (currentQuestionIndex < questions.length - 1) {
-			setCurrentQuestionIndex(prev => prev + 1);
+			setCurrentQuestionIndex((prev) => prev + 1);
 		} else {
 			setGameFinished(true);
 		}
@@ -74,8 +74,8 @@ export default function Game() {
 	const handleAnswer = (selectedIndex: number) => {
 		if (selectedIndex === questions[currentQuestionIndex].correct) {
 			const scoreForQuestion = Math.floor((timeLeft / 20) * 50);
-			setTotalScore(prev => prev + scoreForQuestion);
-			setCorrectCount(prev => prev + 1);
+			setTotalScore((prev) => prev + scoreForQuestion);
+			setCorrectCount((prev) => prev + 1);
 		}
 		advanceQuestion();
 	};
@@ -83,7 +83,7 @@ export default function Game() {
 	// Advance question or finish game and reset states
 	const advanceQuestion = () => {
 		if (currentQuestionIndex < questions.length - 1) {
-			setCurrentQuestionIndex(prev => prev + 1);
+			setCurrentQuestionIndex((prev) => prev + 1);
 		} else {
 			setGameFinished(true);
 		}
@@ -127,7 +127,7 @@ export default function Game() {
 
 	// Return Home button handler (assumes index screen is home)
 	const returnHome = () => {
-		router.push("../");
+		router.push("/");
 	};
 
 	// If game finished, display summary
@@ -137,7 +137,9 @@ export default function Game() {
 				<View className="flex-1 justify-center items-center p-6">
 					<Text className="text-white text-3xl font-righteous mb-4">Game Over</Text>
 					<Text className="text-white text-xl font-righteous mb-2">Total Score: {totalScore}</Text>
-					<Text className="text-white text-xl font-righteous mb-6">Correct Answers: {correctCount} / {questions.length}</Text>
+					<Text className="text-white text-xl font-righteous mb-6">
+						Correct Answers: {correctCount} / {questions.length}
+					</Text>
 					<TouchableOpacity onPress={returnHome} className="bg-black-100 border-2 border-blue-100 rounded-3xl p-3">
 						<Text className="text-grey-200 text-center text-xl font-righteous">Return Home</Text>
 					</TouchableOpacity>
@@ -164,12 +166,10 @@ export default function Game() {
 					</View>
 					{/* Question at the top */}
 					<View className="mt-6 bg-black-200 p-4 rounded-2xl border-2 border-blue-200">
-						<Text className="text-white text-lg font-righteous">
-							{questions[currentQuestionIndex].question}
-						</Text>
+						<Text className="text-white text-lg font-righteous">{questions[currentQuestionIndex].question}</Text>
 					</View>
 				</View>
-				 {/* Graphics Section: 4 player images in a row above a larger host image and host output */}
+				{/* Graphics Section: 4 player images in a row above a larger host image and host output */}
 				<View className="mt-6">
 					{/* Player images row with middle images moved up */}
 					<View className="flex-row justify-around">
@@ -195,9 +195,7 @@ export default function Game() {
 						<TouchableOpacity
 							key={index}
 							onPress={!eliminatedOptions[index] ? () => handleAnswer(index) : undefined}
-							className={`bg-black-100 border-2 border-blue-100 rounded-3xl p-3 mb-2 ${
-								eliminatedOptions[index] ? "opacity-50" : ""
-							}`}
+							className={`bg-black-100 border-2 border-blue-100 rounded-3xl p-3 mb-2 ${eliminatedOptions[index] ? "opacity-50" : ""}`}
 						>
 							<Text className="text-grey-200 text-center text-xl font-righteous">{option}</Text>
 						</TouchableOpacity>
@@ -207,18 +205,14 @@ export default function Game() {
 						<TouchableOpacity
 							onPress={handleHint}
 							disabled={hintUsed}
-							className={`bg-black-100 border-2 border-blue-100 rounded-3xl p-3 flex-1 mr-2 ${
-								hintUsed ? "opacity-50" : ""
-							}`}
+							className={`bg-black-100 border-2 border-blue-100 rounded-3xl p-3 flex-1 mr-2 ${hintUsed ? "opacity-50" : ""}`}
 						>
 							<Text className="text-grey-200 text-center text-xl font-righteous">Hint</Text>
 						</TouchableOpacity>
 						<TouchableOpacity
 							onPress={handleElimination}
 							disabled={eliminationUsed}
-							className={`bg-black-100 border-2 border-blue-100 rounded-3xl p-3 flex-1 ml-2 ${
-								eliminationUsed ? "opacity-50" : ""
-							}`}
+							className={`bg-black-100 border-2 border-blue-100 rounded-3xl p-3 flex-1 ml-2 ${eliminationUsed ? "opacity-50" : ""}`}
 						>
 							<Text className="text-grey-200 text-center text-xl font-righteous">50/50</Text>
 						</TouchableOpacity>
