@@ -1,9 +1,12 @@
 import { View, Text, ImageBackground, Image, TouchableOpacity, ImageSourcePropType } from "react-native";
 import { useState } from "react";
+//import { VolumeManager } from 'react-native-volume-manager';
 
-
+import Slider from "@react-native-community/slider";
 import images from "@/constants/images";
 import icons from "@/constants/icons";
+
+//VolumeManager.showNativeVolumeUI({ enabled: true });
 
 const MenuButton = ({ text }: { text: string }) => (
 	<TouchableOpacity className="">
@@ -15,6 +18,8 @@ interface Account {
 	profile: ImageSourcePropType;
 	name: string;
 	email: string;
+	position: number;
+	score: number;
 }
 
 const profile = () => {
@@ -71,7 +76,7 @@ const Profile = () => {
 			return (
 				<View className="flex-1">
 					<ImageBackground source={images.leaderboardBackground} className="w-full h-full flex justify-start items-center" resizeMode="cover">
-						<ProfileTop profile={images.profile1} name="James Harvey" email="abc_def@outlook.com" />
+						<ProfileTop profile={images.profile1} name="James Harvey" email="abc_def@outlook.com" position={1} score={110} />
 						<View className="flex-1 mt-14">
 							<View className="flex flex-row items-center justify-between px-4 py-5 border-b border-gray-300">
 								<TouchableOpacity className="flex flex-row" onPress={() => setActiveTab("profiledetails")}>
@@ -99,24 +104,20 @@ const Profile = () => {
 	};
 };
 
-const ProfileDetailsContent = ({ profile, name, email }: Account) => (
+const ProfileDetailsContent = ({ profile, name, email, position, score }: Account) => (
 	<View className="flex-1">
 		<View className="mt-8 flex justify-center items-center">
 			<Image source={profile} className="size-36 rounded-full shadow-lg" />
 			<Text className="mt-3 text-white text-2xl font-righteous">{name}</Text>
 		</View>
-		<Text className="mt-20 text-white text-xl font-righteous">{email}</Text>
-	</View>
-);
-
-const SettingsContent = () => (
-	<View className="flex-1">
-		<View className="mt-6 flex justify-center items-center">
-			<Text className="mt-20 text-white text-xl font-righteous">Volume</Text>
-			<Text className="mt-10 text-white text-xl font-righteous">Difficulty</Text>
+		<View className="mt-16 flex justify-center items-center">
+			<Text className="mt-5 text-white font-size: 14px font-righteous">Email Address: {email}</Text>
+			<Text className="mt-5 text-white font-size: 14px font-righteous">Leaderboard Position: {position}</Text>
+			<Text className="mt-5 text-white font-size: 14px font-righteous">Total Score: {score}</Text>
 		</View>
 	</View>
 );
+
 
 const ProfileDetails = () => {
 	const [activeTab, setActiveTab] = useState("profiledetails");
@@ -133,7 +134,7 @@ const ProfileDetails = () => {
 						<View className="mt-6 flex justify-center items-center">
 							<Text className="mt-3 text-white text-2xl font-righteous">Profile Details</Text>
 						</View>	
-						<ProfileDetailsContent profile={images.profile1} name="James Harvey" email="abc_def@outlook.com" />					
+						<ProfileDetailsContent profile={images.profile1} name="James Harvey" email="abc_def@outlook.com" position={1} score={110}/>					
 					</View>					
 					<View className="flex flex-row items-center justify-between px-4 py-5 border-b border-gray-300">
 							<TouchableOpacity className="flex flex-row" onPress={() => setActiveTab("profile")}>
@@ -148,6 +149,7 @@ const ProfileDetails = () => {
 
 const Settings = () => {
 	const [activeTab, setActiveTab] = useState("settings");
+	const [sliderState, setSliderState] = useState<number>(0);
 	switch (activeTab) {
 		case "profile":
 			return <Profile />
@@ -160,8 +162,14 @@ const Settings = () => {
 					<View className="flex-1">
 						<View className="mt-6 flex justify-center items-center">
 							<Text className="mt-3 text-white text-2xl font-righteous">Settings</Text>
-						</View>	
-						<SettingsContent />					
+						</View>							
+						<View className="flex-1">
+							<View className="mt-6 flex justify-center items-center">
+								<Text className="mt-20 text-white text-xl font-righteous">Volume</Text>
+								<Slider style={{ width: 200, height: 40}} value={sliderState} onSlidingComplete={(value) => setSliderState(value)} minimumValue={0} maximumValue={1} minimumTrackTintColor="#FFFFFF" maximumTrackTintColor="#ADD8E6"></Slider>
+								<Text className="mt-10 text-white text-xl font-righteous">Difficulty</Text>
+							</View>
+						</View>
 					</View>
 						<View className="flex flex-row items-center justify-between px-4 py-5 border-b border-gray-300">
 								<TouchableOpacity className="flex flex-row" onPress={() => setActiveTab("profile")}>

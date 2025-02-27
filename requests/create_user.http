@@ -1,11 +1,11 @@
-POST http://127.0.0.1:8000/auth/users/
+POST http://192.168.107.83:8000/auth/users/
 Content-Type: application/json
 
 {
-    "username": "questionmanager",
-    "email": "kirtokyni@gmail.com",
-    "password": "yourpassword",
-    "re_password": "yourpassword"
+    "username": "test44",
+    "email": "kyryllebedin@gmail.com",
+    "password": "qwerty12345@",
+    "re_password": "qwerty12345@"
 }
 
 

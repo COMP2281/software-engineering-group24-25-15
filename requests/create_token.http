@@ -1,4 +1,4 @@
-POST http://127.0.0.1:8000/auth/jwt/create
+POST http://10.247.205.57:8000/auth/jwt/create
 Content-Type: application/json
 
 {

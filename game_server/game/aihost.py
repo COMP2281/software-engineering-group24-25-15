@@ -16,6 +16,8 @@ def gpt4free_request(message):
     )
     return response.choices[0].message.content
 
+
+# select the desired engine
 model_request = gpt4free_request
 
 
@@ -40,6 +42,7 @@ def generate_hint(question_instance):
         f"Incorrect Answers: {', '.join(incorrect_answers)}\n"
         "Provide a helpful hint guiding towards the correct answer without revealing it. Use max 1 sentence, be discrete, make hint more revealing."
     )
+
 
     # Send request to the GPT-based function
     response = model_request(message)
