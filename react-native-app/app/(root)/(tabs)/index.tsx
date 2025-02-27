@@ -1,4 +1,5 @@
 import { ImageBackground, View, TouchableOpacity, Text } from "react-native";
+import { router } from "expo-router";
 
 import images from "@/constants/images";
 
@@ -26,7 +27,7 @@ export default function Index() {
 					<Text className="uppercase font-righteous text-5xl text-white">Logo</Text>
 				</View>
 				<View className="w-full h-1/2 flex justify-center items-center">
-					<MenuButton text="Game" />
+					<MenuButton text="Game" onPress={() => router.push("./game")} />
 					<MenuButton text="Practise" />
 				</View>
 			</View>
