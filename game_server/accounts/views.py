@@ -17,6 +17,7 @@ from rest_framework import status
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import AllowAny
 from django.http import HttpResponse
+from django.contrib.auth import authenticate
 
 User = get_user_model()
 
@@ -100,3 +101,30 @@ class CustomPasswordResetView(APIView):
         send_mail(subject, message, from_email, recipient_list)
         
         return Response({"detail": "New password has been sent to your email."}, status=status.HTTP_200_OK)
+    
+
+
+from django.contrib.auth.hashers import check_password
+
+class CheckUserActivationView(APIView):
+    """Check if a user with provided username, email, and password is activated."""
+    permission_classes = [AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        username = request.data.get("username")
+        email = request.data.get("email")
+        password = request.data.get("password")
+
+        if not username or not email or not password:
+            return Response({"detail": "Username, email, and password are required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            user = User.objects.get(username=username, email=email)
+        except User.DoesNotExist:
+            return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        # Validate password using check_password
+        if not check_password(password, user.password):
+            return Response({"detail": "Invalid password."}, status=status.HTTP_401_UNAUTHORIZED)
+
+        return Response({"active": user.is_active}, status=status.HTTP_200_OK)

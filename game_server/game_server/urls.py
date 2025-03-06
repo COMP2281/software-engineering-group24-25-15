@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from accounts.views import ActivateUserView
 from accounts.views import CustomPasswordResetView
+from accounts.views import CheckUserActivationView
 
 
 urlpatterns = [
@@ -28,7 +29,7 @@ urlpatterns = [
     path('auth/users/custom_reset_password/', CustomPasswordResetView.as_view(), name='custom-reset-password'),
     re_path(r'^auth/', include('djoser.urls')),
     re_path(r'^auth/', include('djoser.urls.jwt')),
-
     path('game/', include('game.urls')),
+    path('check_user_activation/', CheckUserActivationView.as_view(), name='check-user-activation'),
 ]
 
