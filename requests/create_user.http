@@ -1,11 +1,11 @@
-POST http://192.168.107.83:8000/auth/users/
+POST http://192.168.174.203:8000/auth/users/
 Content-Type: application/json
 
 {
-    "username": "test44",
-    "email": "kyryllebedin@gmail.com",
-    "password": "qwerty12345@",
-    "re_password": "qwerty12345@"
+    "username": "jamwilltim16",
+    "email": "jamwillharvey@gmail.com",
+    "password": "123",
+    "re_password": "123"
 }
 
 

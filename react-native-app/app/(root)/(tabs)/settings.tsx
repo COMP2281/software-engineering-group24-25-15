@@ -5,6 +5,7 @@ import { useState } from "react";
 import Slider from "@react-native-community/slider";
 import images from "@/constants/images";
 import icons from "@/constants/icons";
+import { Redirect } from "expo-router";
 
 //VolumeManager.showNativeVolumeUI({ enabled: true });
 
@@ -48,10 +49,6 @@ const profile = () => {
 	);
 };
 
-
-
-
-
 const ProfileTop = ({ profile, name }: Account) => (
 	<View className="flex justify-center items-center rounded-2xl px-4 py-2 mt-24">
 		<Image source={images.profile1} className="size-32 rounded-full shadow-lg" />
@@ -69,13 +66,17 @@ const Profile = () => {
 	const [activeTab, setActiveTab] = useState("profile");
 	switch (activeTab) {
 		case "profiledetails":
-			return <ProfileDetails />
+			return <ProfileDetails />;
 		case "settings":
-			return <Settings />
+			return <Settings />;
 		default:
 			return (
 				<View className="flex-1">
-					<ImageBackground source={images.leaderboardBackground} className="w-full h-full flex justify-start items-center" resizeMode="cover">
+					<ImageBackground
+						source={images.leaderboardBackground}
+						className="w-full h-full flex justify-start items-center"
+						resizeMode="cover"
+					>
 						<ProfileTop profile={images.profile1} name="James Harvey" email="abc_def@outlook.com" position={1} score={110} />
 						<View className="flex-1 mt-14">
 							<View className="flex flex-row items-center justify-between px-4 py-5 border-b border-gray-300">
@@ -91,17 +92,21 @@ const Profile = () => {
 								</TouchableOpacity>
 							</View>
 							<View className="flex flex-row items-center justify-between px-4 py-5 border-b border-gray-300">
-								<TouchableOpacity className="flex flex-row">
+								<TouchableOpacity
+									className="flex flex-row"
+									onPress={() => {
+										<Redirect href="/sign-in" />;
+									}}
+								>
 									<Image source={icons.back} className="w-10 h-9 rounded-full mr-4" />
 									<Text className="text-white font-righteous text-xl">Log Out</Text>
 								</TouchableOpacity>
 							</View>
 						</View>
-						
 					</ImageBackground>
 				</View>
 			);
-	};
+	}
 };
 
 const ProfileDetailsContent = ({ profile, name, email, position, score }: Account) => (
@@ -118,25 +123,34 @@ const ProfileDetailsContent = ({ profile, name, email, position, score }: Accoun
 	</View>
 );
 
-
 const ProfileDetails = () => {
 	const [activeTab, setActiveTab] = useState("profiledetails");
 	switch (activeTab) {
 		case "profile":
-			return <Profile />
+			return <Profile />;
 		case "settings":
-			return <Settings />
+			return <Settings />;
 		default:
 			return (
 				<View className="flex-1">
-					<ImageBackground source={images.leaderboardBackground} className="w-full h-full flex justify-start items-center" resizeMode="cover">
-					<View className="flex-1">
-						<View className="mt-6 flex justify-center items-center">
-							<Text className="mt-3 text-white text-2xl font-righteous">Profile Details</Text>
-						</View>	
-						<ProfileDetailsContent profile={images.profile1} name="James Harvey" email="abc_def@outlook.com" position={1} score={110}/>					
-					</View>					
-					<View className="flex flex-row items-center justify-between px-4 py-5 border-b border-gray-300">
+					<ImageBackground
+						source={images.leaderboardBackground}
+						className="w-full h-full flex justify-start items-center"
+						resizeMode="cover"
+					>
+						<View className="flex-1">
+							<View className="mt-6 flex justify-center items-center">
+								<Text className="mt-3 text-white text-2xl font-righteous">Profile Details</Text>
+							</View>
+							<ProfileDetailsContent
+								profile={images.profile1}
+								name="James Harvey"
+								email="abc_def@outlook.com"
+								position={1}
+								score={110}
+							/>
+						</View>
+						<View className="flex flex-row items-center justify-between px-4 py-5 border-b border-gray-300">
 							<TouchableOpacity className="flex flex-row" onPress={() => setActiveTab("profile")}>
 								<Text className="text-white font-righteous text-xl">Back</Text>
 							</TouchableOpacity>
@@ -144,7 +158,7 @@ const ProfileDetails = () => {
 					</ImageBackground>
 				</View>
 			);
-	};
+	}
 };
 
 const Settings = () => {
@@ -152,35 +166,46 @@ const Settings = () => {
 	const [sliderState, setSliderState] = useState<number>(0);
 	switch (activeTab) {
 		case "profile":
-			return <Profile />
+			return <Profile />;
 		case "profiledetails":
-			return <ProfileDetails />
+			return <ProfileDetails />;
 		default:
 			return (
 				<View className="flex-1">
-					<ImageBackground source={images.leaderboardBackground} className="w-full h-full flex justify-start items-center" resizeMode="cover">
-					<View className="flex-1">
-						<View className="mt-6 flex justify-center items-center">
-							<Text className="mt-3 text-white text-2xl font-righteous">Settings</Text>
-						</View>							
+					<ImageBackground
+						source={images.leaderboardBackground}
+						className="w-full h-full flex justify-start items-center"
+						resizeMode="cover"
+					>
 						<View className="flex-1">
 							<View className="mt-6 flex justify-center items-center">
-								<Text className="mt-20 text-white text-xl font-righteous">Volume</Text>
-								<Slider style={{ width: 200, height: 40}} value={sliderState} onSlidingComplete={(value) => setSliderState(value)} minimumValue={0} maximumValue={1} minimumTrackTintColor="#FFFFFF" maximumTrackTintColor="#ADD8E6"></Slider>
-								<Text className="mt-10 text-white text-xl font-righteous">Difficulty</Text>
+								<Text className="mt-3 text-white text-2xl font-righteous">Settings</Text>
+							</View>
+							<View className="flex-1">
+								<View className="mt-6 flex justify-center items-center">
+									<Text className="mt-20 text-white text-xl font-righteous">Volume</Text>
+									<Slider
+										style={{ width: 200, height: 40 }}
+										value={sliderState}
+										onSlidingComplete={(value) => setSliderState(value)}
+										minimumValue={0}
+										maximumValue={1}
+										minimumTrackTintColor="#FFFFFF"
+										maximumTrackTintColor="#ADD8E6"
+									></Slider>
+									<Text className="mt-10 text-white text-xl font-righteous">Difficulty</Text>
+								</View>
 							</View>
 						</View>
-					</View>
 						<View className="flex flex-row items-center justify-between px-4 py-5 border-b border-gray-300">
-								<TouchableOpacity className="flex flex-row" onPress={() => setActiveTab("profile")}>
-									<Text className="text-white font-righteous text-xl">Back</Text>
-								</TouchableOpacity>
-							</View>
+							<TouchableOpacity className="flex flex-row" onPress={() => setActiveTab("profile")}>
+								<Text className="text-white font-righteous text-xl">Back</Text>
+							</TouchableOpacity>
+						</View>
 					</ImageBackground>
 				</View>
 			);
-	};
+	}
 };
-
 
 export default Profile;
