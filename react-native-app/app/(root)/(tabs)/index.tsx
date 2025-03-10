@@ -28,7 +28,7 @@ export default function Index() {
 				</View>
 				<View className="w-full h-1/2 flex justify-center items-center">
 					<MenuButton text="Game" onPress={() => router.push("/game")} />
-					<MenuButton text="Practise" />
+					<MenuButton text="Practise" onPress={() => router.push("/practise")} />
 				</View>
 			</View>
 		</View>
