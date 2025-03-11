@@ -4,6 +4,7 @@ import { Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 
+import { AuthProvider } from "@/lib/auth/authContext";
 import icons from "@/constants/icons";
 import images from "@/constants/images";
 
@@ -14,7 +15,7 @@ const getAllImageAssets = () => {
 	return [...Object.values(icons), ...Object.values(images)];
 };
 
-const Preloader = ({ children }: { children: any }) => {
+const Preloader = ({ children }: { children: React.ReactNode }) => {
 	const [isLoading, setIsLoading] = useState(true);
 	const [loadedImages, setLoadedImages] = useState(new Set());
 	const imageAssets = getAllImageAssets();
@@ -105,5 +106,11 @@ const styles = StyleSheet.create({
 });
 
 export default function RootLayout() {
-	return <Preloader children={undefined} />;
+	return (
+		<AuthProvider>
+			<Preloader>
+				<Stack />
+			</Preloader>
+		</AuthProvider>
+	);
 }
