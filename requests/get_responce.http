@@ -1,9 +1,9 @@
 GET http://127.0.0.1:8000/game/responce/
-Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQxMjkxODA0LCJpYXQiOjE3NDEyNzM4MDQsImp0aSI6IjNkYjlmZTMyODNjOTQ0MTRhNzc2NTMzMGFjYTdmZWRkIiwidXNlcl9pZCI6NH0.D7Foa2tWoHr3jSoar_2HSFWQ7aXsE0UomW0asLb8Gow
+Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQxNjIyNzYxLCJpYXQiOjE3NDE2MDQ3NjEsImp0aSI6Ijk4Y2Q1MjZiNzA3YzQxZjlhZjQ4ZGMwZWMwNDU3ODZiIiwidXNlcl9pZCI6MzZ9.TK0djDUV3D1fVLphS9rFhJydFBTvbKScRRzIR4Q2VWQ
 Content-Type: application/json
 
 {
-    "request": "what is the capital of great britain"
+    "request": "how to pass the uni module?"
 }
 
 

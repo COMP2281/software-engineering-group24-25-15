@@ -1,7 +1,6 @@
 # accounts/views.py
 from rest_framework import generics, status, views
 from rest_framework.response import Response
-from .serializers import UserRegistrationSerializer
 from djoser.serializers import ActivationSerializer
 from rest_framework.request import Request
 from rest_framework.views import APIView
@@ -17,7 +16,7 @@ from rest_framework import status
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import AllowAny
 from django.http import HttpResponse
-from django.contrib.auth import authenticate
+from game.models import Statistics
 
 User = get_user_model()
 
@@ -46,6 +45,9 @@ class ActivateUserView(views.APIView):
             # Activate the user and save changes
             user.is_active = True
             user.save()
+
+            Statistics.objects.create(user=user)
+
             return HttpResponse(
                 "<h1>Congratulations, your account is activated!</h1>",
                 status=status.HTTP_200_OK,

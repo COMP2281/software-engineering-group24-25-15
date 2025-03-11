@@ -31,5 +31,6 @@ urlpatterns = [
     re_path(r'^auth/', include('djoser.urls.jwt')),
     path('game/', include('game.urls')),
     path('check_user_activation/', CheckUserActivationView.as_view(), name='check-user-activation'),
+    path('friends/', include('friends.urls')),
 ]
 

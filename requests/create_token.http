@@ -2,8 +2,8 @@ POST http://127.0.0.1:8000/auth/jwt/create
 Content-Type: application/json
 
 {
-    "username": "jamwill",
-    "password": "jamwill01"
+    "username": "test30",
+    "password": "yourpassword"
 }
 
 
