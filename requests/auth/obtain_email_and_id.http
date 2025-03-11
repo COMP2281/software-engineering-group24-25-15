@@ -1,0 +1,7 @@
+POST http://127.0.0.1:8000/accounts/retrieve-user/
+Content-Type: application/json
+
+{
+    "username": "testkyryl",
+    "password": "yourpassword"
+}
