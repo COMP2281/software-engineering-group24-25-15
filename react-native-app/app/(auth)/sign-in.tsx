@@ -1,17 +1,45 @@
-import { View, Text, ImageBackground, TextInput, TouchableOpacity } from "react-native";
+import { View, Text, ImageBackground, TextInput, TouchableOpacity, Alert } from "react-native";
 import { useState } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
 
 import images from "@/constants/images";
+import { useAuth } from "@/lib/auth/authContext";
+import { loginUser } from "@/lib/auth/authApi";
 
 const SignIn = () => {
+	const [username, setUsername] = useState("");
 	const [password, setPassword] = useState("");
-
 	const [showPassword, setShowPassword] = useState(false);
+	const [loading, setLoading] = useState(false);
+
+	const { login } = useAuth();
 
 	const toggleShowPassword = () => {
 		setShowPassword(!showPassword);
+	};
+
+	const handleSignIn = async () => {
+		if (!username || !password) {
+			Alert.alert("Error", "Please enter both username and password");
+			return;
+		}
+
+		setLoading(true);
+
+		try {
+			const response = await loginUser({ username, password });
+
+			// Store tokens and username in the global context
+			await login(response.access, response.refresh, response.username);
+
+			// Navigation is handled by the index page which will redirect based on auth state
+			router.replace("/");
+		} catch (error) {
+			Alert.alert("Login Failed", error instanceof Error ? error.message : "Something went wrong");
+		} finally {
+			setLoading(false);
+		}
 	};
 
 	return (
@@ -23,8 +51,11 @@ const SignIn = () => {
 					<TextInput
 						className="w-full px-5 py-5 bg-black-100 border-2 border-blue-100 rounded-2xl text-grey-200 text-xl font-righteous"
 						placeholder="Username"
+						value={username}
+						onChangeText={setUsername}
 						numberOfLines={1}
 						placeholderTextColor="#666"
+						autoCapitalize="none"
 					/>
 					<TouchableOpacity onPress={() => {}} className="mt-1">
 						<Text className="text-blue-300 text-xs font-bold w-4/5">Forgotten Username?</Text>
@@ -48,10 +79,13 @@ const SignIn = () => {
 					</TouchableOpacity>
 				</View>
 				<TouchableOpacity
-					className="w-1/2 flex justify-center items-center bg-black-100 rounded-3xl py-3 mb-5 border-2 border-blue-100"
-					onPress={() => {}}
+					className={`w-1/2 flex justify-center items-center bg-black-100 rounded-3xl py-3 mb-5 border-2 border-blue-100 ${
+						loading ? "opacity-50" : ""
+					}`}
+					onPress={handleSignIn}
+					disabled={loading}
 				>
-					<Text className="text-grey-200 font-righteous uppercase">Sign In</Text>
+					<Text className="text-grey-200 font-righteous uppercase">{loading ? "Signing In..." : "Sign In"}</Text>
 				</TouchableOpacity>
 			</View>
 			<View className="absolute bottom-0 w-full flex justify-center items-center pb-5">

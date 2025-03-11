@@ -1,11 +1,10 @@
 import { View, Text, ImageBackground, TextInput, TouchableOpacity, Alert } from "react-native";
 import { useState } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Redirect, router } from "expo-router";
+import { router } from "expo-router";
 
 import images from "@/constants/images";
-
-import { registerUser } from "@/lib/user";
+import { registerUser } from "@/lib/user/userApi";
 
 const SignUp = () => {
 	const [email, setEmail] = useState("");
@@ -53,18 +52,16 @@ const SignUp = () => {
 				re_password: confirmPassword,
 			};
 
-			const response = await registerUser(userData);
+			await registerUser(userData);
 
-			// Show success message
-			Alert.alert("Success", "Account created successfully! Please sign in.", [
-				{
-					text: "OK",
-					onPress: () => router.push("/verify"),
-				},
-			]);
+			// Navigate to verification page with email
+			router.push({
+				pathname: "/verify",
+				params: { email },
+			});
 		} catch (error) {
 			console.log(error);
-			Alert.alert(error instanceof Error ? error.message : "Something went wrong");
+			Alert.alert("Registration Failed", error instanceof Error ? error.message : "Something went wrong");
 		} finally {
 			setLoading(false);
 		}
@@ -106,6 +103,7 @@ const SignUp = () => {
 						numberOfLines={1}
 						placeholder="Password"
 						placeholderTextColor="#666"
+						autoCapitalize="none"
 					/>
 					<MaterialCommunityIcons name={showPassword ? "eye-off" : "eye"} size={24} color="#aaa" onPress={toggleShowPassword} />
 				</View>
@@ -119,6 +117,7 @@ const SignUp = () => {
 						numberOfLines={1}
 						placeholder="Confirm Password"
 						placeholderTextColor="#666"
+						autoCapitalize="none"
 					/>
 					<MaterialCommunityIcons
 						name={showConfirmPassword ? "eye-off" : "eye"}

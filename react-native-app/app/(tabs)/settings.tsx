@@ -8,8 +8,9 @@ import images from "@/constants/images";
 import icons from "@/constants/icons";
 import { Redirect, router } from "expo-router";
 
-//VolumeManager.showNativeVolumeUI({ enabled: true });
+import { useAuth } from "@/lib/auth/authContext";
 
+//VolumeManager.showNativeVolumeUI({ enabled: true });
 
 interface Account {
 	profile: ImageSourcePropType;
@@ -19,16 +20,12 @@ interface Account {
 	score: number;
 }
 
-
 const Profile = () => {
 	const [activeTab, setActiveTab] = useState("profile");
+	const { logout } = useAuth();
 	switch (activeTab) {
 		case "profiledetails":
-			return <ProfileDetails profile={images.profile1}
-			name="James Harvey"
-			email="abc_def@outlook.com"
-			position={1}
-			score={110}/>;
+			return <ProfileDetails profile={images.profile1} name="James Harvey" email="abc_def@outlook.com" position={1} score={110} />;
 		case "editprofile":
 			return <EditProfile />;
 		case "settings":
@@ -39,12 +36,17 @@ const Profile = () => {
 					<ImageBackground
 						source={images.leaderboardBackground}
 						className="w-full h-full flex justify-start items-center"
-						resizeMode="cover">
+						resizeMode="cover"
+					>
 						<View className="flex justify-center items-center rounded-2xl px-4 py-2 mt-24">
 							<Image source={images.profile1} className="size-32 rounded-full shadow-lg" />
 							<View className="items-center mt-4">
 								<Text className="text-white text-2xl font-righteous">James Harvey</Text>
-								<TouchableOpacity className="flex flex-row items-center" onPress={() => setActiveTab("editprofile")} activeOpacity={0.6}>
+								<TouchableOpacity
+									className="flex flex-row items-center"
+									onPress={() => setActiveTab("editprofile")}
+									activeOpacity={0.6}
+								>
 									<Image source={icons.edit} className="size-4 mr-2" tintColor={"#6b7280"} />
 									<Text className="text-gray-500 text-lg font-righteous">Edit Profile</Text>
 								</TouchableOpacity>
@@ -66,9 +68,11 @@ const Profile = () => {
 							<View className="flex flex-row items-center justify-between px-4 py-5 border-b border-gray-300">
 								<TouchableOpacity
 									className="flex flex-row"
-									onPress={() => {
-										router.push("/sign-in")
-									}}>
+									onPress={async () => {
+										await logout();
+										router.replace("/sign-in");
+									}}
+								>
 									<Image source={icons.back} className="w-10 h-9 rounded-full mr-4" />
 									<Text className="text-white font-righteous text-xl">Log Out</Text>
 								</TouchableOpacity>
@@ -105,17 +109,13 @@ const ProfileDetails = ({ profile, name, email, position, score }: Account) => {
 					<ImageBackground
 						source={images.leaderboardBackground}
 						className="w-full h-full flex justify-start items-center"
-						resizeMode="cover">
+						resizeMode="cover"
+					>
 						<View className="flex-1">
 							<View className="mt-6 flex justify-center items-center">
 								<Text className="mt-3 text-white text-2xl font-righteous">Profile Details</Text>
 							</View>
-							<ProfileDetailsContent
-								profile={profile}
-								name={name}
-								email={email}
-								position={position}
-								score={score}/>;
+							<ProfileDetailsContent profile={profile} name={name} email={email} position={position} score={score} />;
 						</View>
 						<View className="flex flex-row items-center justify-between px-4 py-5 border-b border-gray-300">
 							<TouchableOpacity className="flex flex-row" onPress={() => setActiveTab("profile")}>
@@ -127,7 +127,6 @@ const ProfileDetails = ({ profile, name, email, position, score }: Account) => {
 			);
 	}
 };
-
 
 const Settings = () => {
 	const [activeTab, setActiveTab] = useState("settings");
@@ -141,7 +140,8 @@ const Settings = () => {
 					<ImageBackground
 						source={images.leaderboardBackground}
 						className="w-full h-full flex justify-start items-center"
-						resizeMode="cover">
+						resizeMode="cover"
+					>
 						<View className="flex-1">
 							<View className="mt-6 flex justify-center items-center">
 								<Text className="mt-3 text-white text-2xl font-righteous">Settings</Text>
@@ -172,8 +172,6 @@ const Settings = () => {
 	}
 };
 
-
-
 const EditProfile = () => {
 	const [activeTab, setActiveTab] = useState("editprofile");
 	switch (activeTab) {
@@ -185,7 +183,8 @@ const EditProfile = () => {
 					<ImageBackground
 						source={images.leaderboardBackground}
 						className="w-full h-full flex justify-start items-center"
-						resizeMode="cover">
+						resizeMode="cover"
+					>
 						<View className="flex-1">
 							<View className="mt-6 flex justify-center items-center">
 								<Text className="mt-3 text-white text-2xl font-righteous">Edit Profile</Text>

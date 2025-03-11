@@ -1,5 +1,6 @@
 import { ImageBackground, View, TouchableOpacity, Text } from "react-native";
-import { router } from "expo-router";
+import { Redirect, router } from "expo-router";
+import { useAuth } from "@/lib/auth/authContext";
 
 import images from "@/constants/images";
 
@@ -19,6 +20,13 @@ const MenuButton = ({ text, onPress }: MenuButtonProps) => {
 };
 
 export default function Index() {
+	const { isLoggedIn } = useAuth();
+
+	// If not logged in, redirect to sign-in
+	if (!isLoggedIn) {
+		return <Redirect href="/sign-in" />;
+	}
+
 	return (
 		<View>
 			<ImageBackground source={images.mainBackground} className="w-full h-full" resizeMode="cover" />
