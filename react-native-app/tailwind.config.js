@@ -20,6 +20,7 @@ module.exports = {
 				blue: {
 					100: "#83B0D0",
 				},
+				danger: "#F75555",
 			},
 		},
 	},

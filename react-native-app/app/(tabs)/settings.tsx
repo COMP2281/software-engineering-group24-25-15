@@ -1,204 +1,74 @@
-import { View, Text, ImageBackground, Image, TouchableOpacity, ImageSourcePropType, ScrollView } from "react-native";
-import { useState } from "react";
-
-//import { VolumeManager } from 'react-native-volume-manager';
-
-import Slider from "@react-native-community/slider";
-import images from "@/constants/images";
-import icons from "@/constants/icons";
-import { Redirect, router } from "expo-router";
-
+import { View, Text, ImageBackground, Image, TouchableOpacity, ScrollView, ImageSourcePropType } from "react-native";
+import { router } from "expo-router";
 import { useAuth } from "@/lib/auth/authContext";
 
-//VolumeManager.showNativeVolumeUI({ enabled: true });
+import images from "@/constants/images";
+import icons from "@/constants/icons";
+import { settings } from "@/constants/data";
 
-interface Account {
-	profile: ImageSourcePropType;
-	name: string;
-	email: string;
-	position: number;
-	score: number;
+interface SettingsItemProps {
+	icon: ImageSourcePropType;
+	title: string;
+	onPress?: () => void;
+	textStyle?: string;
+	showArrow?: boolean;
 }
 
+const SettingsItem = ({ icon, title, onPress, textStyle, showArrow = true }: SettingsItemProps) => {
+	return (
+		<TouchableOpacity onPress={onPress} className="flex flex-row items-center justify-between py-3">
+			<View className="flex flex-row items-center gap-3">
+				<Image source={icon} className="size-6" tintColor={"#fff"} />
+				<Text className={`text-lg font-righteous text-white ${textStyle}`}>{title}</Text>
+			</View>
+
+			{showArrow && <Image source={icons.rightArrow} className="size-5" tintColor={"#fff"} />}
+		</TouchableOpacity>
+	);
+};
+
 const Profile = () => {
-	const [activeTab, setActiveTab] = useState("profile");
-	const { logout } = useAuth();
-	switch (activeTab) {
-		case "profiledetails":
-			return <ProfileDetails profile={images.profile1} name="James Harvey" email="abc_def@outlook.com" position={1} score={110} />;
-		case "editprofile":
-			return <EditProfile />;
-		case "settings":
-			return <Settings />;
-		default:
-			return (
-				<View className="flex-1">
-					<ImageBackground
-						source={images.leaderboardBackground}
-						className="w-full h-full flex justify-start items-center"
-						resizeMode="cover"
-					>
-						<View className="flex justify-center items-center rounded-2xl px-4 py-2 mt-24">
-							<Image source={images.profile1} className="size-32 rounded-full shadow-lg" />
-							<View className="items-center mt-4">
-								<Text className="text-white text-2xl font-righteous">James Harvey</Text>
-								<TouchableOpacity
-									className="flex flex-row items-center"
-									onPress={() => setActiveTab("editprofile")}
-									activeOpacity={0.6}
-								>
-									<Image source={icons.edit} className="size-4 mr-2" tintColor={"#6b7280"} />
-									<Text className="text-gray-500 text-lg font-righteous">Edit Profile</Text>
-								</TouchableOpacity>
-							</View>
-						</View>
-						<View className="flex-1 mt-14">
-							<View className="flex flex-row items-center justify-between px-4 py-5 border-b border-gray-300">
-								<TouchableOpacity className="flex flex-row" onPress={() => setActiveTab("profiledetails")}>
-									<Image source={icons.profile} className="w-8 h-9 rounded-full mr-4" />
-									<Text className="text-white font-righteous text-xl">Profile Details</Text>
-								</TouchableOpacity>
-							</View>
-							<View className="flex flex-row items-center justify-between px-4 py-5 border-b border-gray-300">
-								<TouchableOpacity className="flex flex-row" onPress={() => setActiveTab("settings")}>
-									<Image source={icons.stats} className="w-10 h-9 rounded-full mr-4" />
-									<Text className="text-white font-righteous text-xl">Settings</Text>
-								</TouchableOpacity>
-							</View>
-							<View className="flex flex-row items-center justify-between px-4 py-5 border-b border-gray-300">
-								<TouchableOpacity
-									className="flex flex-row"
-									onPress={async () => {
-										await logout();
-										router.replace("/sign-in");
-									}}
-								>
-									<Image source={icons.back} className="w-10 h-9 rounded-full mr-4" />
-									<Text className="text-white font-righteous text-xl">Log Out</Text>
-								</TouchableOpacity>
-							</View>
-						</View>
-					</ImageBackground>
-				</View>
-			);
-	}
-};
+	const { logout, username } = useAuth();
+	const muted = false;
 
-const ProfileDetailsContent = ({ profile, name, email, position, score }: Account) => (
-	<View className="flex-1">
-		<View className="mt-8 flex justify-center items-center">
-			<Image source={profile} className="size-36 rounded-full shadow-lg" />
-			<Text className="mt-3 text-white text-2xl font-righteous">{name}</Text>
+	const handleLogout = () => {
+		logout();
+		router.push("/sign-in");
+	};
+
+	return (
+		<View className="h-full bg-white">
+			<ImageBackground source={images.leaderboardBackground} className="w-full h-full" resizeMode="cover">
+				<ScrollView showsHorizontalScrollIndicator={false} contentContainerClassName="pb-32 px-7">
+					<View className="flex-row justify-between items-center py-6">
+						<Text className="text-white text-3xl font-righteous">Profile</Text>
+						<TouchableOpacity onPress={() => {}} className="mr-4">
+							<Image source={icons.addFriend} className="size-6" tintColor={"#fff"} />
+						</TouchableOpacity>
+					</View>
+
+					<View className="flex-row justify-center flex">
+						<View className="flex-col flex items-center relative mt-5">
+							<Image source={images.profile1} className="size-44 relative rounded-full" />
+							<TouchableOpacity className="absolute bottom-11 right-2">
+								<Image source={icons.edit} className="size-9" />
+							</TouchableOpacity>
+							<Text className="text-2xl font-righteous text-white mt-2">{username}</Text>
+						</View>
+					</View>
+					<View className="flex flex-col mt-5 border-t pt-5 border-white">
+						{settings.slice().map((item, index) => (
+							<SettingsItem key={index} {...item} />
+						))}
+					</View>
+					<View className="flex flex-col mt-5 border-t pt-5 border-white">
+						<SettingsItem icon={muted ? icons.mute : icons.volume} title="Sound" onPress={() => {}} showArrow={false} />
+						<SettingsItem icon={icons.logout} title="Logout" onPress={handleLogout} textStyle="text-danger" showArrow={false} />
+					</View>
+				</ScrollView>
+			</ImageBackground>
 		</View>
-		<View className="mt-16 flex justify-center items-center">
-			<Text className="mt-5 text-white font-size: 14px font-righteous">Email Address: {email}</Text>
-			<Text className="mt-5 text-white font-size: 14px font-righteous">Leaderboard Position: {position}</Text>
-			<Text className="mt-5 text-white font-size: 14px font-righteous">Total Score: {score}</Text>
-		</View>
-	</View>
-);
-
-const ProfileDetails = ({ profile, name, email, position, score }: Account) => {
-	const [activeTab, setActiveTab] = useState("profiledetails");
-	switch (activeTab) {
-		case "profile":
-			return <Profile />;
-		default:
-			return (
-				<View className="flex-1">
-					<ImageBackground
-						source={images.leaderboardBackground}
-						className="w-full h-full flex justify-start items-center"
-						resizeMode="cover"
-					>
-						<View className="flex-1">
-							<View className="mt-6 flex justify-center items-center">
-								<Text className="mt-3 text-white text-2xl font-righteous">Profile Details</Text>
-							</View>
-							<ProfileDetailsContent profile={profile} name={name} email={email} position={position} score={score} />;
-						</View>
-						<View className="flex flex-row items-center justify-between px-4 py-5 border-b border-gray-300">
-							<TouchableOpacity className="flex flex-row" onPress={() => setActiveTab("profile")}>
-								<Text className="text-white font-righteous text-xl">Back</Text>
-							</TouchableOpacity>
-						</View>
-					</ImageBackground>
-				</View>
-			);
-	}
-};
-
-const Settings = () => {
-	const [activeTab, setActiveTab] = useState("settings");
-	const [sliderState, setSliderState] = useState<number>(0);
-	switch (activeTab) {
-		case "profile":
-			return <Profile />;
-		default:
-			return (
-				<View className="flex-1">
-					<ImageBackground
-						source={images.leaderboardBackground}
-						className="w-full h-full flex justify-start items-center"
-						resizeMode="cover"
-					>
-						<View className="flex-1">
-							<View className="mt-6 flex justify-center items-center">
-								<Text className="mt-3 text-white text-2xl font-righteous">Settings</Text>
-							</View>
-							<View className="flex-1">
-								<View className="mt-6 flex justify-center items-center">
-									<Text className="mt-20 text-white text-xl font-righteous">Volume</Text>
-									<Slider
-										style={{ width: 200, height: 40 }}
-										value={sliderState}
-										onSlidingComplete={(value) => setSliderState(value)}
-										minimumValue={0}
-										maximumValue={1}
-										minimumTrackTintColor="#FFFFFF"
-										maximumTrackTintColor="#ADD8E6"
-									></Slider>
-								</View>
-							</View>
-						</View>
-						<View className="flex flex-row items-center justify-between px-4 py-5 border-b border-gray-300">
-							<TouchableOpacity className="flex flex-row" onPress={() => setActiveTab("profile")}>
-								<Text className="text-white font-righteous text-xl">Back</Text>
-							</TouchableOpacity>
-						</View>
-					</ImageBackground>
-				</View>
-			);
-	}
-};
-
-const EditProfile = () => {
-	const [activeTab, setActiveTab] = useState("editprofile");
-	switch (activeTab) {
-		case "profile":
-			return <Profile />;
-		default:
-			return (
-				<View className="flex-1">
-					<ImageBackground
-						source={images.leaderboardBackground}
-						className="w-full h-full flex justify-start items-center"
-						resizeMode="cover"
-					>
-						<View className="flex-1">
-							<View className="mt-6 flex justify-center items-center">
-								<Text className="mt-3 text-white text-2xl font-righteous">Edit Profile</Text>
-							</View>
-						</View>
-						<View className="flex flex-row items-center justify-between px-4 py-5 border-b border-gray-300">
-							<TouchableOpacity className="flex flex-row" onPress={() => setActiveTab("profile")}>
-								<Text className="text-white font-righteous text-xl">Back</Text>
-							</TouchableOpacity>
-						</View>
-					</ImageBackground>
-				</View>
-			);
-	}
+	);
 };
 
 export default Profile;

@@ -109,7 +109,13 @@ export default function RootLayout() {
 	return (
 		<AuthProvider>
 			<Preloader>
-				<Stack />
+				<Stack
+					screenOptions={{
+						headerShown: false,
+						statusBarStyle: "light",
+						statusBarBackgroundColor: "black",
+					}}
+				></Stack>
 			</Preloader>
 		</AuthProvider>
 	);
