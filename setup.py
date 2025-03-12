@@ -33,6 +33,9 @@ def main():
     # Create superuser non-interactively (if needed)
     create_superuser()
 
+    # add quesiton from GameQuestionsInitial.csv to db
+    run_command([sys.executable, "game_server/import_questions.py"])
+
     # Run server with graceful shutdown on Ctrl+C
     try:
         run_command([sys.executable, "game_server/manage.py", "runserver"])
