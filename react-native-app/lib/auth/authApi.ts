@@ -15,7 +15,7 @@ export interface ApiError {
 	detail?: string;
 }
 
-const API_URL = "http://192.168.0.5:8000";
+const API_URL = process.env.SERVER_ADDRESS;
 
 export const loginUser = async (userData: LoginUserData): Promise<LoginResponse> => {
 	try {
