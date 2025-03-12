@@ -1,0 +1,11 @@
+POST http://127.0.0.1:8000/auth/users/
+Content-Type: application/json
+
+{
+    "username": "testkyryl",
+    "email": "kyryllebedin@gmail.com",
+    "password": "yourpassword",
+    "re_password": "yourpassword"
+}
+
+

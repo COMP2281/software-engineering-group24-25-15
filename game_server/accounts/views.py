@@ -17,6 +17,7 @@ from django.contrib.auth import get_user_model
 from rest_framework.permissions import AllowAny
 from django.http import HttpResponse
 from game.models import Statistics
+from .serializers import UserObtainEmailSerializer
 
 User = get_user_model()
 
@@ -130,3 +131,16 @@ class CheckUserActivationView(APIView):
             return Response({"detail": "Invalid password."}, status=status.HTTP_401_UNAUTHORIZED)
 
         return Response({"active": user.is_active}, status=status.HTTP_200_OK)
+
+
+class UserRetrieveView(APIView):
+    """
+    API to retrieve user's email and ID by username and password.
+    """
+    def post(self, request, *args, **kwargs):
+        serializer = UserObtainEmailSerializer(data=request.data)
+        
+        if serializer.is_valid():
+            return Response(serializer.validated_data, status=status.HTTP_200_OK)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

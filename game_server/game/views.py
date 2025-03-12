@@ -1,11 +1,11 @@
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, generics, permissions
 import random
 
-from .models import Question
-from .serializers import QuestionSerializer
+from .models import Question, Statistics
+from .serializers import QuestionSerializer, StatisticsSerializer
 
 from .aihost import generate_hint, model_request
 
@@ -74,3 +74,28 @@ def get_responce(request):
     model_responce = model_request(user_request)
     
     return Response(model_responce, status=status.HTTP_200_OK)
+
+
+class UserStatisticsView(generics.RetrieveUpdateAPIView):
+    """
+    GET:    Retrieve the current user's statistics
+    PUT:    Update (or create) the current user's statistics
+    PATCH:  Partially update the current user's statistics
+    """
+    serializer_class = StatisticsSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        # "self.request.user" is the currently authenticated user
+        # "user.statistics" is the OneToOne relationship on the Statistics model
+        return self.request.user.statistics
+    
+
+class UserStatisticsDetailView(generics.RetrieveAPIView):
+    """
+    GET: Retrieve the statistics of any user by their user ID.
+    """
+    queryset = Statistics.objects.all()
+    serializer_class = StatisticsSerializer
+    permission_classes = [permissions.IsAuthenticated]  # Adjust as needed
+    lookup_field = "user_id"  # This allows querying by user_id
