@@ -12,13 +12,14 @@ interface SettingsItemProps {
 	onPress?: () => void;
 	textStyle?: string;
 	showArrow?: boolean;
+	tintColor?: string;
 }
 
-const SettingsItem = ({ icon, title, onPress, textStyle, showArrow = true }: SettingsItemProps) => {
+const SettingsItem = ({ icon, title, onPress, textStyle, showArrow = true, tintColor = "#fff" }: SettingsItemProps) => {
 	return (
 		<TouchableOpacity onPress={onPress} className="flex flex-row items-center justify-between py-3">
 			<View className="flex flex-row items-center gap-3">
-				<Image source={icon} className="size-6" tintColor={"#fff"} />
+				<Image source={icon} className="size-6" tintColor={tintColor} />
 				<Text className={`text-lg font-righteous text-white ${textStyle}`}>{title}</Text>
 			</View>
 
@@ -38,16 +39,16 @@ const Profile = () => {
 
 	return (
 		<View className="h-full bg-white">
-			<ImageBackground source={images.leaderboardBackground} className="w-full h-full" resizeMode="cover">
-				<ScrollView showsHorizontalScrollIndicator={false} contentContainerClassName="pb-32 px-7">
-					<View className="flex-row justify-between items-center py-6">
-						<Text className="text-white text-3xl font-righteous">Profile</Text>
-						<TouchableOpacity onPress={() => {}} className="mr-4">
-							<Image source={icons.addFriend} className="size-6" tintColor={"#fff"} />
-						</TouchableOpacity>
-					</View>
+			<ImageBackground source={images.leaderboardBackground} className="w-full h-full px-7" resizeMode="cover">
+				<View className="flex-row justify-between items-center py-6">
+					<Text className="text-white text-3xl font-righteous">Profile</Text>
+					<TouchableOpacity onPress={() => {}} className="mr-4">
+						<Image source={icons.addFriend} className="size-6" tintColor={"#fff"} />
+					</TouchableOpacity>
+				</View>
 
-					<View className="flex-row justify-center flex">
+				<ScrollView showsHorizontalScrollIndicator={false}>
+					<View className="flex-row justify-center flex mb-3">
 						<View className="flex-col flex items-center relative mt-5">
 							<Image source={images.profile1} className="size-44 relative rounded-full" />
 							<TouchableOpacity className="absolute bottom-11 right-2">
@@ -63,7 +64,14 @@ const Profile = () => {
 					</View>
 					<View className="flex flex-col mt-5 border-t pt-5 border-white">
 						<SettingsItem icon={muted ? icons.mute : icons.volume} title="Sound" onPress={() => {}} showArrow={false} />
-						<SettingsItem icon={icons.logout} title="Logout" onPress={handleLogout} textStyle="text-danger" showArrow={false} />
+						<SettingsItem
+							icon={icons.logout}
+							title="Logout"
+							onPress={handleLogout}
+							textStyle="text-red-500"
+							showArrow={false}
+							tintColor="#ef4444"
+						/>
 					</View>
 				</ScrollView>
 			</ImageBackground>

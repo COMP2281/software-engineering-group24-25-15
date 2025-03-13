@@ -19,8 +19,6 @@ import { API_URL } from '@/constants/config';
 
 export const loginUser = async (userData: LoginUserData): Promise<LoginResponse> => {
 	try {
-		console.log(`Attempting to login at: ${API_URL}/auth/jwt/create/`);
-		
 		const response = await fetch(`${API_URL}/auth/jwt/create/`, {
 			method: "POST",
 			headers: {
