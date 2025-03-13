@@ -1,6 +1,6 @@
 import { ApiError } from "../auth/authApi";
 
-const API_URL = process.env.SERVER_ADDRESS;
+const API_URL = "http://192.168.0.5:8000";
 
 export interface RegisterUserData {
 	username: string;
@@ -42,26 +42,36 @@ export const registerUser = async (userData: RegisterUserData): Promise<{ succes
 	}
 };
 
-export const checkVerifiedEmail = async (userData: { username: string; email: string; password: string }): Promise<boolean> => {
+export interface CheckActivationData {
+	username: string;
+	email: string;
+	password: string;
+}
+
+export const checkVerifiedEmail = async (userData: CheckActivationData): Promise<boolean> => {
 	try {
-		const response = await fetch(`${API_URL}/auth/users/me/`, {
-			method: "GET",
+		console.log(userData);
+		const response = await fetch(`${API_URL}/check_user_activation/`, {
+			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
-				Authorization: `JWT ${userData.password}`, // This needs to be a token in the real implementation
 			},
+			body: JSON.stringify(userData),
 		});
 
 		if (!response.ok) {
-			return false;
+			const errorData = await response.json();
+			throw new Error(errorData.detail || errorData.message || "Failed to verify email");
 		}
 
-		// Check if the user is verified (this depends on your backend implementation)
-		const user = await response.json();
-		return user.is_active === true;
+		const data = await response.json();
+		return data.active === true;
 	} catch (error) {
 		console.error("Error checking verification status:", error);
-		return false;
+		if (error instanceof Error) {
+			throw error;
+		}
+		throw new Error("Failed to verify email: Unknown error");
 	}
 };
 
@@ -76,7 +86,8 @@ export const resendEmail = async (email: string): Promise<{ success: boolean }> 
 		});
 
 		if (!response.ok) {
-			throw new Error("Failed to resend verification email");
+			const errorData = await response.json();
+			throw new Error(errorData.detail || errorData.message || "Failed to resend verification email");
 		}
 
 		return { success: true };

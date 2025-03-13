@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, ImageBackground, Alert } from "react-native";
+import { View, Text, TouchableOpacity, ImageBackground, Alert, TextInput } from "react-native";
 import { useLocalSearchParams, router } from "expo-router";
 import { useState } from "react";
 import { checkVerifiedEmail, resendEmail } from "@/lib/user/userApi";
@@ -29,23 +29,39 @@ const VerifyEmail = () => {
 	const params = useLocalSearchParams();
 	const email = params.email as string;
 
+	const [username, setUsername] = useState("");
+	const [password, setPassword] = useState("");
 	const [verifyLoading, setVerifyLoading] = useState(false);
 	const [resendLoading, setResendLoading] = useState(false);
 
 	const handleVerification = async () => {
-		if (!email) {
-			Alert.alert("Error", "Email information is missing");
+		if (!email || !username || !password) {
+			Alert.alert("Error", "Please enter your username and password to verify your account");
 			return;
 		}
 
 		setVerifyLoading(true);
 
 		try {
-			await checkVerifiedEmail({ username: "", email, password: "" });
-			Alert.alert("Success", "Email has been verified");
-			router.replace("/sign-in");
+			const isVerified = await checkVerifiedEmail({
+				username,
+				email,
+				password,
+			});
+
+			if (isVerified) {
+				Alert.alert("Success", "Your email has been verified", [
+					{
+						text: "Sign In",
+						onPress: () => router.replace("/sign-in"),
+					},
+				]);
+			} else {
+				Alert.alert("Not Verified", "Your email has not been verified yet. Please check your inbox and follow the verification link.");
+			}
 		} catch (error) {
 			Alert.alert("Verification Failed", error instanceof Error ? error.message : "Something went wrong");
+		} finally {
 			setVerifyLoading(false);
 		}
 	};
@@ -77,7 +93,29 @@ const VerifyEmail = () => {
 				<Text className="text-base text-grey-200 mb-8 text-center px-6 font-righteous">
 					We've sent a verification email to your address. Please check your inbox and follow the instructions to verify your account.
 				</Text>
-				<Button text="I Verified" onPress={handleVerification} loading={verifyLoading} />
+
+				<View className="w-4/5 mb-3">
+					<TextInput
+						className="w-full mb-3 px-5 py-5 bg-black-100 border-2 border-blue-100 rounded-2xl text-grey-200 text-xl font-righteous"
+						placeholder="Username"
+						value={username}
+						onChangeText={setUsername}
+						placeholderTextColor="#666"
+						autoCapitalize="none"
+					/>
+
+					<TextInput
+						className="w-full px-5 py-5 bg-black-100 border-2 border-blue-100 rounded-2xl text-grey-200 text-xl font-righteous"
+						placeholder="Password"
+						value={password}
+						onChangeText={setPassword}
+						secureTextEntry
+						placeholderTextColor="#666"
+						autoCapitalize="none"
+					/>
+				</View>
+
+				<Button text="Check Verification" onPress={handleVerification} loading={verifyLoading} />
 				<Button text="Resend Email" onPress={handleResendEmail} loading={resendLoading} />
 
 				<TouchableOpacity className="mt-8" onPress={() => router.replace("/sign-in")}>

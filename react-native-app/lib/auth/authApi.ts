@@ -15,11 +15,11 @@ export interface ApiError {
 	detail?: string;
 }
 
-const API_URL = process.env.SERVER_ADDRESS;
+const API_URL = "http://192.168.0.5:8000";
 
 export const loginUser = async (userData: LoginUserData): Promise<LoginResponse> => {
 	try {
-		const response = await fetch(`${API_URL}/auth/jwt/create/`, {
+		const response = await fetch(`${API_URL}/auth/jwt/create`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",

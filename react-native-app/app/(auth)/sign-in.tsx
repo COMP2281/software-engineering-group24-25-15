@@ -71,6 +71,7 @@ const SignIn = () => {
 							numberOfLines={1}
 							placeholder="Password"
 							placeholderTextColor="#666"
+							autoCapitalize="none"
 						/>
 						<MaterialCommunityIcons name={showPassword ? "eye-off" : "eye"} size={24} color="#aaa" onPress={toggleShowPassword} />
 					</View>
