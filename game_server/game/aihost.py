@@ -1,24 +1,51 @@
-from g4f.client import Client
+import os
+from dotenv import load_dotenv
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # One level up
+ENV_PATH = os.path.join(BASE_DIR, "..",  ".env")  # Two levels up
+
+# Load environment variables
+load_dotenv(ENV_PATH)
+
+# Now, all environment variables are available
+IBM_CLOUD_URL = os.getenv("IBM_CLOUD_URL")
+IBM_API_KEY = os.getenv("IBM_API_KEY")
+IBM_MODEL_ID = os.getenv("IBM_MODEL_ID")
+IBM_PROJECT_ID = os.getenv("IBM_PROJECT_ID")
 
 
 
-# available model options
-# connect your API key if needed
 
-def gpt4free_request(message):
-    client = Client()
-    response = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[{"role": "user", "content": 
-                   message
-                   }],
-        web_search=False
+def ibm_granite_request(message):
+    from ibm_watsonx_ai import APIClient
+    from ibm_watsonx_ai import Credentials
+    from ibm_watsonx_ai.foundation_models import ModelInference
+
+    # Ensure the environment variables are loaded correctly
+    if not all([IBM_CLOUD_URL, IBM_API_KEY, IBM_MODEL_ID, IBM_PROJECT_ID]):
+        raise ValueError("Missing required environment variables for IBM Watson.")
+
+    credentials = Credentials(
+        url=IBM_CLOUD_URL,
+        api_key=IBM_API_KEY,
     )
-    return response.choices[0].message.content
+
+    client = APIClient(credentials)
+
+    model = ModelInference(
+        model_id=IBM_MODEL_ID,
+        api_client=client,
+        project_id=IBM_PROJECT_ID,
+        params={
+            "max_new_tokens": 100
+        }
+    )
+
+    return model.generate_text(message)
 
 
 # select the desired engine
-model_request = gpt4free_request
+model_request = ibm_granite_request
 
 
 def generate_hint(question_instance):
@@ -40,7 +67,7 @@ def generate_hint(question_instance):
         f"Category: {topic}\n"
         f"Correct Answer: {correct_answer}\n"
         f"Incorrect Answers: {', '.join(incorrect_answers)}\n"
-        "Provide a helpful hint guiding towards the correct answer without revealing it. Use max 1 sentence, be discrete, make hint more revealing."
+        "Provide a helpful hint guiding towards the correct answer, but do not print the answer. Use max 1 sentence, be discrete, make hint more revealing."
     )
 
 
