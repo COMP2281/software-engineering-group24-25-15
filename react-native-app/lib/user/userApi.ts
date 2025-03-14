@@ -1,6 +1,5 @@
 import { ApiError } from "../auth/authApi";
-
-const API_URL = "http://192.168.0.5:8000";
+import { API_URL } from '../../constants/config';
 
 export interface RegisterUserData {
 	username: string;

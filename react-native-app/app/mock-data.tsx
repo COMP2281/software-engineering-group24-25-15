@@ -191,3 +191,8 @@ export const getMockIntroduction = (topic: string): string => {
   return MOCK_INTRODUCTIONS[topic] || 
     `Welcome to the ${topic} round! Let's test your knowledge and see how well you understand this exciting field!`;
 };
+
+// Add a default export with a simple component to satisfy Expo Router
+export default function MockData() {
+  return null;
+}
