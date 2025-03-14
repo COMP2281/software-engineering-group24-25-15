@@ -24,7 +24,6 @@ from accounts.views import CheckUserActivationView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls')),
-    # Place custom endpoints before the Djoser URLs
     path('auth/users/activate/<uid>/<token>/', ActivateUserView.as_view(), name='user-activate'),
     path('auth/users/custom_reset_password/', CustomPasswordResetView.as_view(), name='custom-reset-password'),
     re_path(r'^auth/', include('djoser.urls')),

@@ -24,7 +24,7 @@ User = get_user_model()
 
 class ActivateUserView(views.APIView):
     """Handles user activation via GET request when clicking the email link"""
-    token_generator = UserViewSet.token_generator  # Use Djoser's token generator
+    token_generator = UserViewSet.token_generator  
 
     def get(self, request, uid, token):
         data = {"uid": uid, "token": token}
@@ -43,7 +43,7 @@ class ActivateUserView(views.APIView):
                         status=status.HTTP_400_BAD_REQUEST,
                         content_type="text/html"
                     )
-            # Activate the user and save changes
+           
             user.is_active = True
             user.save()
 
@@ -55,7 +55,7 @@ class ActivateUserView(views.APIView):
                 content_type="text/html"
             )
         
-        # Return an error message if activation fails
+       
         return HttpResponse(
             "Activation failed: " + str(serializer.errors),
             status=status.HTTP_400_BAD_REQUEST,
@@ -69,7 +69,7 @@ class ActivateUserView(views.APIView):
 class CustomPasswordResetView(APIView):
     # Override authentication and permissions to allow unauthenticated access.
     permission_classes = [AllowAny]
-    authentication_classes = []  # This disables any global authentication for this view
+    authentication_classes = []  
 
     def post(self, request, *args, **kwargs):
         email = request.data.get("email")
@@ -79,18 +79,16 @@ class CustomPasswordResetView(APIView):
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
-            # To avoid exposing whether a user exists, return 204 No Content.
             return Response(status=status.HTTP_204_NO_CONTENT)
         
-        # Generate a new secure password (for example, 12 characters long)
+        # Generate a new secure password 
         alphabet = string.ascii_letters + string.digits + string.punctuation
         new_password = ''.join(secrets.choice(alphabet) for _ in range(12))
         
-        # Update the user's password (using set_password to hash the password properly)
+        
         user.set_password(new_password)
         user.save()
         
-        # Prepare and send the email with the new password
         subject = "Your New Password"
         message = (
             f"Hello {user.username},\n\n"
@@ -126,7 +124,6 @@ class CheckUserActivationView(APIView):
         except User.DoesNotExist:
             return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
 
-        # Validate password using check_password
         if not check_password(password, user.password):
             return Response({"detail": "Invalid password."}, status=status.HTTP_401_UNAUTHORIZED)
 

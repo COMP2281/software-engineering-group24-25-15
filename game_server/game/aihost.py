@@ -1,13 +1,13 @@
 import os
 from dotenv import load_dotenv
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # One level up
-ENV_PATH = os.path.join(BASE_DIR, "..",  ".env")  # Two levels up
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) 
+ENV_PATH = os.path.join(BASE_DIR, "..",  ".env")  
 
-# Load environment variables
+
 load_dotenv(ENV_PATH)
 
-# Now, all environment variables are available
+
 IBM_CLOUD_URL = os.getenv("IBM_CLOUD_URL")
 IBM_API_KEY = os.getenv("IBM_API_KEY")
 IBM_MODEL_ID = os.getenv("IBM_MODEL_ID")
@@ -21,7 +21,6 @@ def ibm_granite_request(message):
     from ibm_watsonx_ai import Credentials
     from ibm_watsonx_ai.foundation_models import ModelInference
 
-    # Ensure the environment variables are loaded correctly
     if not all([IBM_CLOUD_URL, IBM_API_KEY, IBM_MODEL_ID, IBM_PROJECT_ID]):
         raise ValueError("Missing required environment variables for IBM Watson.")
 
@@ -44,7 +43,6 @@ def ibm_granite_request(message):
     return model.generate_text(message)
 
 
-# select the desired engine
 model_request = ibm_granite_request
 
 
@@ -53,7 +51,7 @@ def generate_hint(question_instance):
     Generate a hint for a given Question instance.
     """
     question_text = question_instance.question_text
-    topic = question_instance.category  # Renamed from 'topic' to match the model
+    topic = question_instance.category  
     correct_answer = question_instance.correct_answer
     incorrect_answers = [
         question_instance.incorrect_answer1,
@@ -61,7 +59,6 @@ def generate_hint(question_instance):
         question_instance.incorrect_answer3
     ]
 
-    # Constructing the prompt efficiently
     message = (
         f"Question: {question_text}\n"
         f"Category: {topic}\n"
@@ -70,8 +67,6 @@ def generate_hint(question_instance):
         "Provide a helpful hint guiding towards the correct answer, but do not print the answer. Use max 1 sentence, be discrete, make hint more revealing."
     )
 
-
-    # Send request to the GPT-based function
     response = model_request(message)
 
     return response
