@@ -23,13 +23,11 @@ def list_friends(request, user_id=None):
     else:
         user = request.user
 
-    # Filter where this user is either the sender or receiver, and status=1
     friendships = Friend.objects.filter(
         Q(from_user=user) | Q(to_user=user),
         status=1
     )
 
-    # The "other" user in the relationship is the actual friend
     friend_users = []
     for f in friendships:
         friend = f.to_user if f.from_user == user else f.from_user
@@ -73,14 +71,13 @@ def send_friend_request(request):
 
     to_user = get_object_or_404(User, id=to_user_id)
 
-    # Don’t allow sending request to yourself
+
     if to_user == request.user:
         return Response(
             {"detail": "You cannot send a friend request to yourself."},
             status=status.HTTP_400_BAD_REQUEST
         )
 
-    # Check if there's already a Friend object for these two users
     existing_friendship = Friend.objects.filter(
         (Q(from_user=request.user, to_user=to_user) | 
          Q(from_user=to_user, to_user=request.user))
@@ -92,7 +89,6 @@ def send_friend_request(request):
         else:
             return Response({"detail": "A friend request is already pending."}, status=status.HTTP_400_BAD_REQUEST)
     
-    # Create a new friend request
     friend_request = Friend.objects.create(
         from_user=request.user,
         to_user=to_user,
@@ -116,12 +112,11 @@ def accept_friend_request(request):
             status=status.HTTP_400_BAD_REQUEST
         )
 
-    # Make sure the current user is the one receiving the request
     friend_request = get_object_or_404(
         Friend,
         id=friend_request_id,
         to_user=request.user,
-        status=0  # must still be pending
+        status=0  # still pending
     )
 
     # Update status to accepted

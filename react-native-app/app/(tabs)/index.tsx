@@ -20,11 +20,11 @@ const MenuButton = ({ text, onPress }: MenuButtonProps) => {
 };
 
 export default function Index() {
-	const { isLoggedIn } = useAuth();
+	const { isAuthenticated } = useAuth();
 
 	// If not logged in, redirect to sign-in
-	if (!isLoggedIn) {
-		return <Redirect href="/sign-in" />;
+	if (!isAuthenticated) {
+		return <Redirect href="/(auth)/sign-in" />;
 	}
 
 	return (
@@ -35,7 +35,7 @@ export default function Index() {
 					<Text className="uppercase font-righteous text-5xl text-white">Logo</Text>
 				</View>
 				<View className="w-full h-1/2 flex justify-center items-center">
-					<MenuButton text="Game" onPress={() => router.push("/game")} />
+					<MenuButton text="Game" onPress={() => router.push("/topic-selection")} />
 					<MenuButton text="Practise" onPress={() => router.push("/practise")} />
 				</View>
 			</View>

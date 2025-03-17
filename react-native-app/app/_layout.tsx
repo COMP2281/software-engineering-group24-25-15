@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Image, ActivityIndicator, StyleSheet, Text } from "react-native";
-import { Stack } from "expo-router";
+import { Slot } from "expo-router";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 
@@ -75,17 +75,7 @@ const Preloader = ({ children }: { children: React.ReactNode }) => {
 		);
 	}
 
-	return (
-		<Stack
-			screenOptions={{
-				headerShown: false,
-				statusBarStyle: "light",
-				statusBarBackgroundColor: "black",
-			}}
-		>
-			{children}
-		</Stack>
-	);
+	return <Slot />;
 };
 
 const styles = StyleSheet.create({
@@ -109,13 +99,7 @@ export default function RootLayout() {
 	return (
 		<AuthProvider>
 			<Preloader>
-				<Stack
-					screenOptions={{
-						headerShown: false,
-						statusBarStyle: "light",
-						statusBarBackgroundColor: "black",
-					}}
-				></Stack>
+				<Slot />
 			</Preloader>
 		</AuthProvider>
 	);

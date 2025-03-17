@@ -15,11 +15,11 @@ export interface ApiError {
 	detail?: string;
 }
 
-const API_URL = "http://192.168.0.5:8000";
+import { API_URL } from '@/constants/config';
 
 export const loginUser = async (userData: LoginUserData): Promise<LoginResponse> => {
 	try {
-		const response = await fetch(`${API_URL}/auth/jwt/create`, {
+		const response = await fetch(`${API_URL}/auth/jwt/create/`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -27,16 +27,18 @@ export const loginUser = async (userData: LoginUserData): Promise<LoginResponse>
 			body: JSON.stringify(userData),
 		});
 
+		console.log(`Login response status: ${response.status}`);
 		const data = await response.json();
+		console.log('Response data:', data);
 
 		if (!response.ok) {
 			const errorData = data as ApiError;
 			throw new Error(
 				errorData.detail ||
-					errorData.message ||
-					Object.entries(errorData.errors || {})
-						.map(([key, errors]) => `${key}: ${errors.join(", ")}`)
-						.join("; ") ||
+				errorData.message ||
+				Object.entries(errorData.errors || {})
+					.map(([key, errors]) => `${key}: ${errors.join(", ")}`)
+					.join("; ") ||
 					"Login failed"
 			);
 		}
@@ -48,10 +50,11 @@ export const loginUser = async (userData: LoginUserData): Promise<LoginResponse>
 			username: userData.username,
 		};
 	} catch (error) {
-		if (error instanceof Error) {
-			throw new Error(`Login failed: ${error.message}`);
+		console.error('Login fetch error:', error);
+		if (error instanceof TypeError && error.message === "Network request failed") {
+			throw new Error(`Network request failed. Please check if the API server is running and accessible at ${API_URL}`);
 		}
-		throw new Error("Login failed: Unknown error");
+		throw error;
 	}
 };
 

@@ -36,19 +36,14 @@ def run_react_native():
 def main():
     print("Setting up Django project...")
 
-    # Install dependencies
     run_command([sys.executable, "-m", "pip", "install", "-r", "requirements.txt"])
 
-    # Apply migrations
     run_command([sys.executable, "game_server/manage.py", "migrate"])
-    
-    # Create superuser non-interactively (if needed)
+
     create_superuser()
 
-    # Add questions from CSV to database
     run_command([sys.executable, "game_server/import_questions.py"])
 
-    # Start the backend server
     try:
         print("\nStarting Django server...")
         backend_process = subprocess.Popen(
@@ -59,7 +54,6 @@ def main():
         print("\nStarting React Native app...")
         run_react_native()
 
-        # Keep Django running
         backend_process.communicate()
 
     except KeyboardInterrupt:

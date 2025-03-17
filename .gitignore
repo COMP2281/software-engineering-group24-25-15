@@ -1,5 +1,5 @@
 /venv
-
+.env
 # dependencies
 node_modules/
 
@@ -37,3 +37,4 @@ yarn-error.*
 
 *pyc
 db.sqlite3
+react-native-app/.env
