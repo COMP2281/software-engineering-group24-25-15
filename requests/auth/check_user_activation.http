@@ -1,4 +1,4 @@
-POST http://192.168.0.5:8000/check_user_activation/
+POST http://192.168.82.203:8000/check_user_activation/
 Content-Type: application/json
 
 {

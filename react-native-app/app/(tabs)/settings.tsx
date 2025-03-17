@@ -64,14 +64,7 @@ const Profile = () => {
 					</View>
 					<View className="flex flex-col mt-5 border-t pt-5 border-white">
 						<SettingsItem icon={muted ? icons.mute : icons.volume} title="Sound" onPress={() => {}} showArrow={false} />
-						<SettingsItem
-							icon={icons.logout}
-							title="Logout"
-							onPress={handleLogout}
-							textStyle="text-red-500"
-							showArrow={false}
-							tintColor="#ef4444"
-						/>
+						<SettingsItem icon={icons.logout} title="Logout" onPress={handleLogout} showArrow={false} tintColor="#ef4444" />
 					</View>
 				</ScrollView>
 			</ImageBackground>
