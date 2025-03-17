@@ -32,7 +32,8 @@ export default function Index() {
 			<ImageBackground source={images.mainBackground} className="w-full h-full" resizeMode="cover" />
 			<View className="absolute h-full w-full top-0 flex items-center justify-center pt-32">
 				<View className="w-full h-1/3 flex justify-center items-center">
-					<Text className="uppercase font-righteous text-5xl text-white">Logo</Text>
+					<Text className="uppercase tracking-[10px] -rotate-2 text-6xl text-gray-100 font-olibrick mr-40">The</Text>
+					<Text className="uppercase tracking-[10px] -rotate-2 text-6xl text-gray-100 font-olibrick ml-40">Tower</Text>
 				</View>
 				<View className="w-full h-1/2 flex justify-center items-center">
 					<MenuButton text="Game" onPress={() => router.push("/topic-selection")} />

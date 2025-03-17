@@ -15,7 +15,7 @@ export interface ApiError {
 	detail?: string;
 }
 
-import { API_URL } from '@/constants/config';
+import { API_URL } from "@/constants/config";
 
 export const loginUser = async (userData: LoginUserData): Promise<LoginResponse> => {
 	try {
@@ -27,18 +27,16 @@ export const loginUser = async (userData: LoginUserData): Promise<LoginResponse>
 			body: JSON.stringify(userData),
 		});
 
-		console.log(`Login response status: ${response.status}`);
 		const data = await response.json();
-		console.log('Response data:', data);
 
 		if (!response.ok) {
 			const errorData = data as ApiError;
 			throw new Error(
 				errorData.detail ||
-				errorData.message ||
-				Object.entries(errorData.errors || {})
-					.map(([key, errors]) => `${key}: ${errors.join(", ")}`)
-					.join("; ") ||
+					errorData.message ||
+					Object.entries(errorData.errors || {})
+						.map(([key, errors]) => `${key}: ${errors.join(", ")}`)
+						.join("; ") ||
 					"Login failed"
 			);
 		}
@@ -50,7 +48,7 @@ export const loginUser = async (userData: LoginUserData): Promise<LoginResponse>
 			username: userData.username,
 		};
 	} catch (error) {
-		console.error('Login fetch error:', error);
+		console.error("Login fetch error:", error);
 		if (error instanceof TypeError && error.message === "Network request failed") {
 			throw new Error(`Network request failed. Please check if the API server is running and accessible at ${API_URL}`);
 		}

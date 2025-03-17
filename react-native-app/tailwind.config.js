@@ -6,6 +6,7 @@ module.exports = {
 		extend: {
 			fontFamily: {
 				righteous: ["Righteous-Regular", "serif"],
+				olibrick: ["Olibrick", "serif"],
 			},
 			colors: {
 				black: {

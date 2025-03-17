@@ -23,3 +23,11 @@ export const settings = [
 		icon: icons.people,
 	},
 ];
+
+export const topics = ["Cyber Security", "AI", "Data", "Cloud Computing"];
+
+export const bots = [
+	{ name: "Bot 1", image: images.profile1 },
+	{ name: "Bot 2", image: images.profile2 },
+	{ name: "Bot 3", image: images.profile3 },
+];

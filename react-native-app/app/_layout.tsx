@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Image, ActivityIndicator, StyleSheet, Text } from "react-native";
-import { Slot } from "expo-router";
+import { Slot, Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 
@@ -22,6 +22,7 @@ const Preloader = ({ children }: { children: React.ReactNode }) => {
 
 	const [fontsLoaded] = useFonts({
 		"Righteous-Regular": require("../assets/fonts/Righteous-Regular.ttf"),
+		Olibrick: require("../assets/fonts/Olibrick.ttf"),
 	});
 
 	useEffect(() => {
@@ -99,7 +100,13 @@ export default function RootLayout() {
 	return (
 		<AuthProvider>
 			<Preloader>
-				<Slot />
+				<Stack
+					screenOptions={{
+						headerShown: false,
+						statusBarStyle: "light",
+						statusBarBackgroundColor: "black",
+					}}
+				/>
 			</Preloader>
 		</AuthProvider>
 	);
