@@ -4,7 +4,7 @@ import { router, Redirect } from "expo-router";
 import images from "@/constants/images";
 import { useAuth } from "@/lib/auth/authContext";
 import { topics } from "@/constants/data";
-import BackButton from "@/components/Buttons";
+import { BackButton } from "@/components/Utilities";
 
 interface TopicButtonProps {
 	topic: string;

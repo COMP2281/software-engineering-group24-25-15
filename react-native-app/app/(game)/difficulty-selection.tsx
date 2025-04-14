@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, ImageBackground } from "react-native";
 import { router, useLocalSearchParams, Redirect } from "expo-router";
 import { useAuth } from "@/lib/auth/authContext";
 import images from "@/constants/images";
-import BackButton from "@/components/Buttons";
+import { BackButton } from "@/components/Utilities";
 
 export type Difficulty = "Easy" | "Medium" | "Hard";
 

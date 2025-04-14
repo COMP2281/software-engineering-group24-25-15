@@ -4,7 +4,8 @@ import { useAuth } from "@/lib/auth/authContext";
 
 import images from "@/constants/images";
 import icons from "@/constants/icons";
-import { settings } from "@/constants/data";
+import { settings, friends } from "@/constants/data";
+import { AddFriendButton } from "@/components/Utilities";
 
 interface SettingsItemProps {
 	icon: ImageSourcePropType;
@@ -28,7 +29,7 @@ const SettingsItem = ({ icon, title, onPress, textStyle, showArrow = true, tintC
 	);
 };
 
-const Profile = () => {
+const Settings = () => {
 	const { logout, username } = useAuth();
 	const muted = false;
 
@@ -40,11 +41,9 @@ const Profile = () => {
 	return (
 		<View className="h-full bg-white">
 			<ImageBackground source={images.leaderboardBackground} className="w-full h-full px-7" resizeMode="cover">
+				<AddFriendButton />
 				<View className="flex-row justify-between items-center py-6">
-					<Text className="text-white text-3xl font-righteous">Profile</Text>
-					<TouchableOpacity onPress={() => {}} className="mr-4">
-						<Image source={icons.addFriend} className="size-6" tintColor={"#fff"} />
-					</TouchableOpacity>
+					<Text className="text-white text-3xl font-righteous">Settings</Text>
 				</View>
 
 				<ScrollView showsHorizontalScrollIndicator={false}>
@@ -56,6 +55,11 @@ const Profile = () => {
 							</TouchableOpacity>
 							<Text className="text-2xl font-righteous text-white mt-2">{username}</Text>
 						</View>
+					</View>
+					<View className="flex flex-col mt-5 border-t pt-5 border-white">
+						{friends.slice().map((item, index) => (
+							<SettingsItem key={index} {...item} />
+						))}
 					</View>
 					<View className="flex flex-col mt-5 border-t pt-5 border-white">
 						{settings.slice().map((item, index) => (
@@ -72,4 +76,4 @@ const Profile = () => {
 	);
 };
 
-export default Profile;
+export default Settings;

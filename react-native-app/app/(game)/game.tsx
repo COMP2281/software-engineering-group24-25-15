@@ -4,7 +4,7 @@ import { router, useLocalSearchParams, Redirect } from "expo-router";
 import { useAuth } from "@/lib/auth/authContext";
 import { getQuestions, getAIResponse, updateStatistics, Question } from "@/lib/api/gameService";
 import { Difficulty } from "./difficulty-selection";
-import { getMockQuestions, getMockIntroduction } from "./mock-data";
+import { getMockQuestions, getMockIntroduction } from "@/lib/api/mockQuestions";
 import { bots } from "@/constants/data";
 import LoadingScreen from "@/components/LoadingScreen";
 import IntroductionScreen from "@/components/IntroductionScreen";

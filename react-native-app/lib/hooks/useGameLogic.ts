@@ -1,7 +1,7 @@
 import { Alert } from "react-native";
 import { router } from "expo-router";
 import { updateStatistics } from "@/lib/api/gameService";
-import { Difficulty } from "@/app/difficulty-selection";
+import { Difficulty } from "@/app/(game)/difficulty-selection";
 import { GameState } from "./useGameState";
 import { bots } from "@/constants/data";
 

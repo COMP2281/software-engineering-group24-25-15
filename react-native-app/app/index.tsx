@@ -2,12 +2,8 @@ import { Redirect } from "expo-router";
 import { useAuth } from "@/lib/auth/authContext";
 
 export default function RootIndex() {
-  const { isAuthenticated } = useAuth();
+	const { isAuthenticated } = useAuth();
 
-  // Redirect to tabs if authenticated, otherwise go to sign-in
-  return isAuthenticated ? (
-    <Redirect href="/(tabs)" />
-  ) : (
-    <Redirect href="/(auth)/sign-in" />
-  );
+	// Redirect to tabs if authenticated, otherwise go to sign-in
+	return isAuthenticated ? <Redirect href="/(tabs)" /> : <Redirect href="/sign-in" />;
 }

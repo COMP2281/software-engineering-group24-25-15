@@ -17,6 +17,8 @@ import person from "@/assets/icons/person.png";
 import language from "@/assets/icons/language.png";
 import volume from "@/assets/icons/volume.png";
 import mute from "@/assets/icons/mute.png";
+import search from "@/assets/icons/search.png";
+import mail from "@/assets/icons/mail.png";
 
 export default {
 	back,
@@ -38,4 +40,6 @@ export default {
 	language,
 	volume,
 	mute,
+	search,
+	mail,
 };
