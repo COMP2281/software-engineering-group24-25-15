@@ -53,3 +53,56 @@ export const friendsList = [
 	{ name: "Friend 7", avatar: images.profile7, status: "online", id: 7, username: "friend7" },
 	{ name: "Friend 8", avatar: images.profile8, status: "offline", id: 8, username: "friend8" },
 ];
+
+export const questions = [
+	{
+		question: "What is 2 + 2?",
+		options: ["3", "4", "5", "6"],
+		correctAnswer: "4",
+	},
+	{
+		question: "Which planet is closest to the sun?",
+		options: ["Earth", "Venus", "Mercury", "Mars"],
+		correctAnswer: "Mercury",
+	},
+	{
+		question: "What is the capital of France?",
+		options: ["London", "Berlin", "Madrid", "Paris"],
+		correctAnswer: "Paris",
+	},
+	{
+		question: "How many legs does a spider have?",
+		options: ["6", "8", "10", "12"],
+		correctAnswer: "8",
+	},
+	{
+		question: "Which is the largest mammal?",
+		options: ["Elephant", "Blue Whale", "Giraffe", "Hippopotamus"],
+		correctAnswer: "Blue Whale",
+	},
+	{
+		question: "What is the chemical symbol for gold?",
+		options: ["Au", "Ag", "Fe", "Go"],
+		correctAnswer: "Au",
+	},
+	{
+		question: "How many sides does a hexagon have?",
+		options: ["5", "6", "7", "8"],
+		correctAnswer: "6",
+	},
+	{
+		question: "What is the largest organ in the human body?",
+		options: ["Brain", "Liver", "Skin", "Heart"],
+		correctAnswer: "Skin",
+	},
+	{
+		question: "Which gas do plants absorb from the atmosphere?",
+		options: ["Oxygen", "Nitrogen", "Carbon Dioxide", "Hydrogen"],
+		correctAnswer: "Carbon Dioxide",
+	},
+	{
+		question: "What is 7 × 8?",
+		options: ["54", "56", "63", "64"],
+		correctAnswer: "56",
+	},
+];

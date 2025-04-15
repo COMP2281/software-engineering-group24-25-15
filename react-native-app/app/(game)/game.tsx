@@ -1,231 +1,156 @@
-import { useState, useEffect, useMemo } from "react";
-import { View, Alert } from "react-native";
-import { router, useLocalSearchParams, Redirect } from "expo-router";
-import { useAuth } from "@/lib/auth/authContext";
-import { getQuestions, getAIResponse, updateStatistics, Question } from "@/lib/api/gameService";
-import { Difficulty } from "./difficulty-selection";
-import { getMockQuestions, getMockIntroduction } from "@/lib/api/mockQuestions";
-import { bots } from "@/constants/data";
-import LoadingScreen from "@/components/LoadingScreen";
-import IntroductionScreen from "@/components/IntroductionScreen";
-import QuestionScreen from "@/components/QuestionScreen";
-import RoundSummaryScreen from "@/components/RoundSummaryScreen";
-import GameSummaryScreen from "@/components/GameSummaryScreen";
-import { useGameState } from "@/lib/hooks/useGameState";
-import { useGameLogic } from "@/lib/hooks/useGameLogic";
+import React, { useState, useRef, useEffect } from "react";
+import { View, Animated, ImageBackground, Image, Text, TouchableOpacity, Dimensions } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import { questions } from "@/constants/data";
+import images from "@/constants/images";
 
-export default function Game() {
-	const { token, isAuthenticated } = useAuth();
-	const params = useLocalSearchParams<{ topics: string; difficulty: string }>();
+// Define types for the question and options
+interface Question {
+	question: string;
+	options: string[];
+	correctAnswer: string;
+}
 
-	// If not logged in, redirect to sign-in
-	if (!isAuthenticated) {
-		return <Redirect href="/(auth)/sign-in" />;
-	}
+const FloorGrid = ({ currentFloor, totalFloors }: { currentFloor: number; totalFloors: number }) => {
+	const translateY = useRef(new Animated.Value(0)).current;
+	const [containerHeight, setContainerHeight] = useState<number>(0); // State to store parent height
 
-	// Memoize the parsed topics to prevent re-parsing on every render
-	const topics = useMemo(() => {
-		try {
-			return params.topics ? JSON.parse(params.topics as string) : [];
-		} catch (e) {
-			console.error("Error parsing topics:", e);
-			return [];
+	useEffect(() => {
+		if (containerHeight > 0) {
+			// Calculate percentage-based translation
+			const percentageTranslation = -((totalFloors - 3 - currentFloor) * containerHeight) / 3;
+
+			// Animate the floor position when the current floor changes
+			Animated.timing(translateY, {
+				toValue: percentageTranslation,
+				duration: 500,
+				useNativeDriver: true,
+			}).start();
 		}
-	}, [params.topics]);
+	}, [currentFloor, totalFloors, containerHeight]);
 
-	const difficulty = (params.difficulty as Difficulty) || "Medium";
+	return (
+		<View className="relative flex-1 flex-col">
+			{/* Floors */}
+			<View id="floors" className="absolute h-3/4 w-full bottom-2 flex flex-col justify-end overflow-hidden">
+				<Animated.View
+					className="flex-1"
+					style={{ transform: [{ translateY }] }}
+					onLayout={(event) => {
+						// Get the height of the parent element
+						const { height } = event.nativeEvent.layout;
+						setContainerHeight(height);
+					}}
+				>
+					{Array.from({ length: totalFloors }, (_, index) => (
+						<View key={index} className="flex flex-row justify-between items-center border-t-4 border-floor h-1/3">
+							<View className="w-20 h-full bg-gray-200/10 justify-center items-center">
+								<Text className="text-white text-center font-righteous">{totalFloors - index - 1}</Text>
+							</View>
+							<View className="flex-1 h-full bg-gray-300/10" />
+							<View className="flex-1 h-full bg-gray-400/10" />
+							<View className="w-20 h-full bg-gray-500/10" />
+						</View>
+					))}
+				</Animated.View>
+			</View>
 
-	// Use custom hooks for game state and logic
-	const gameState = useGameState();
-	const { handleAnswer, handleHint, handleElimination, startRoundAfterIntro, startNextRound, returnHome, handleTimeOut } = useGameLogic(
-		gameState,
-		difficulty,
-		token
+			{/* Gradient lines for the top of the floor */}
+			<View className="absolute w-full h-full bg-transparent inset-0">
+				<View className="absolute left-20 h-full">
+					<LinearGradient colors={["transparent", "#2C2E39"]} start={{ x: 0, y: 0 }} end={{ x: 0, y: 0.2 }} className="w-1 h-full" />
+				</View>
+				<View className="absolute left-1/2 -ml-px h-full">
+					<LinearGradient colors={["transparent", "#2C2E39"]} start={{ x: 0, y: 0 }} end={{ x: 0, y: 0.2 }} className="w-1 h-full" />
+				</View>
+				<View className="absolute right-20 h-full">
+					<LinearGradient colors={["transparent", "#2C2E39"]} start={{ x: 0, y: 0 }} end={{ x: 0, y: 0.2 }} className="w-1 h-full" />
+				</View>
+			</View>
+
+			{/* Thick floor line */}
+			<View className="absolute bg-gray-400 h-2 w-full bottom-0"></View>
+		</View>
 	);
+};
+export default function Game() {
+	const [currentFloor, setCurrentFloor] = useState<number>(0);
+	const [currentQuestion, setCurrentQuestion] = useState<string | null>(null);
+	const [options, setOptions] = useState<string[]>([]);
+	const [gameWon, setGameWon] = useState<boolean>(false);
+	const totalFloors = questions.length;
 
-	// Load questions and introductions from API
 	useEffect(() => {
-		// Skip if there are no topics or no token
-		if (!Array.isArray(topics) || topics.length === 0 || !token) return;
+		// Set initial question
+		loadQuestion(0);
+	}, []);
 
-		console.log("Loading game data with topics:", topics);
-
-		let mounted = true; // To handle component unmount
-
-		const loadGameData = async () => {
-			// Check authentication
-			if (!token) {
-				Alert.alert("Authentication Required", "You need to be logged in to play the game.", [
-					{
-						text: "Go to Login",
-						onPress: () => router.replace("/(auth)/sign-in"),
-					},
-				]);
-				return;
-			}
-
-			try {
-				gameState.setLoading(true);
-				const fetchedQuestions: Question[][] = [];
-				const introductions: string[] = [];
-
-				// Fetch questions for each selected topic
-				for (const topic of topics) {
-					console.log(`Loading questions for topic: ${topic}`);
-					try {
-						const topicQuestions = await getQuestions(token, topic, 3, true);
-
-						// Only update state if component is still mounted
-						if (!mounted) return;
-
-						if (Array.isArray(topicQuestions) && topicQuestions.length > 0) {
-							fetchedQuestions.push(topicQuestions);
-
-							// Get AI host introduction for each topic
-							const promptText = `Write a brief one-sentence introduction for a quiz about ${topic}. Do not ask how you can help. Start with "Welcome to" or "Get ready for".`;
-							try {
-								const intro = await getAIResponse(token, promptText);
-								if (!mounted) return;
-								introductions.push(intro);
-							} catch (introError) {
-								console.error(`Error fetching introduction for ${topic}:`, introError);
-								introductions.push(getMockIntroduction(topic));
-							}
-						} else {
-							console.warn(`No questions returned for topic: ${topic}, using mock data`);
-							fetchedQuestions.push(getMockQuestions(topic));
-							introductions.push(getMockIntroduction(topic));
-						}
-					} catch (topicError) {
-						console.error(`Error loading data for topic ${topic}:`, topicError);
-						fetchedQuestions.push(getMockQuestions(topic));
-						introductions.push(getMockIntroduction(topic));
-					}
-				}
-
-				if (!mounted) return;
-
-				if (fetchedQuestions.length === 0) {
-					throw new Error("No questions could be loaded for any topic");
-				}
-
-				gameState.setQuestions(fetchedQuestions);
-				gameState.setHostIntroductions(introductions);
-				console.log("Game data loaded successfully with", fetchedQuestions.length, "topics");
-			} catch (error) {
-				if (!mounted) return;
-
-				console.error("Failed to load game data:", error);
-				Alert.alert("Error", "Failed to load game data. Would you like to try again?", [
-					{
-						text: "Try Again",
-						onPress: () => loadGameData(),
-					},
-					{
-						text: "Go Back",
-						onPress: () => router.back(),
-						style: "cancel",
-					},
-				]);
-			} finally {
-				if (mounted) {
-					gameState.setLoading(false);
-				}
-			}
-		};
-
-		loadGameData();
-
-		// Cleanup function to handle component unmount
-		return () => {
-			mounted = false;
-		};
-	}, [token, topics]);
-
-	// Timer effect: resets on question/round changes
-	useEffect(() => {
-		if (gameState.gameStage !== "question" || !gameState.currentQuestion) return;
-
-		gameState.setTimeLeft(20);
-		const interval = setInterval(() => {
-			gameState.setTimeLeft((prev) => {
-				if (prev <= 1) {
-					clearInterval(interval);
-					handleTimeOut();
-					return 0;
-				}
-				return prev - 1;
-			});
-		}, 1000);
-
-		return () => clearInterval(interval);
-	}, [gameState.currentRound, gameState.currentQuestionIndex, gameState.gameStage, gameState.currentQuestion]);
-
-	// Initialize eliminatedOptions when the current question changes
-	useEffect(() => {
-		if (gameState.currentQuestion && gameState.gameStage === "question" && Array.isArray(gameState.currentQuestion.options)) {
-			gameState.setEliminatedOptions(new Array(gameState.currentQuestion.options.length).fill(false));
-		} else {
-			gameState.setEliminatedOptions([]);
+	const loadQuestion = (floorNum: number): void => {
+		if (floorNum >= questions.length) {
+			setCurrentQuestion("You've reached the top!");
+			setOptions([]);
+			return;
 		}
-	}, [gameState.currentQuestion, gameState.gameStage]);
 
-	// Show loading screen while fetching data
-	if (gameState.loading) {
-		return <LoadingScreen />;
-	}
+		const questionData: Question = questions[floorNum];
+		setCurrentQuestion(questionData.question);
+		setOptions(questionData.options);
+	};
 
-	// Render different screens based on game stage
-	switch (gameState.gameStage) {
-		case "introduction":
-			return (
-				<IntroductionScreen
-					currentRound={gameState.currentRound}
-					topics={topics}
-					hostIntroductions={gameState.hostIntroductions}
-					onStart={startRoundAfterIntro}
-				/>
-			);
-		case "roundSummary":
-			return (
-				<RoundSummaryScreen
-					currentRound={gameState.currentRound}
-					roundScore={gameState.roundScore}
-					totalScore={gameState.totalScore}
-					botPlayers={bots}
-					botScores={gameState.botScores}
-					onNextRound={startNextRound}
-				/>
-			);
-		case "gameSummary":
-			return (
-				<GameSummaryScreen
-					totalScore={gameState.totalScore}
-					correctCount={gameState.correctCount}
-					topics={topics}
-					botPlayers={bots}
-					botScores={gameState.botScores}
-					onReturnHome={returnHome}
-				/>
-			);
-		case "question":
-		default:
-			return (
-				<QuestionScreen
-					currentRound={gameState.currentRound}
-					currentQuestionIndex={gameState.currentQuestionIndex}
-					topics={topics}
-					totalScore={gameState.totalScore}
-					timeLeft={gameState.timeLeft}
-					currentQuestion={gameState.currentQuestion}
-					hintUsed={gameState.hintUsed}
-					eliminationUsed={gameState.eliminationUsed}
-					eliminatedOptions={gameState.eliminatedOptions}
-					onAnswer={handleAnswer}
-					onHint={handleHint}
-					onElimination={handleElimination}
-					onExit={() => router.back()}
-				/>
-			);
-	}
+	const handleAnswer = (answer: string): void => {
+		const correctAnswer = questions[currentFloor].correctAnswer;
+
+		if (answer === correctAnswer) {
+			const nextFloor = currentFloor + 1;
+
+			setCurrentFloor(nextFloor);
+
+			if (nextFloor >= totalFloors) {
+				setGameWon(true);
+				setCurrentQuestion("Congratulations! You reached the top!");
+				setOptions([]);
+			} else {
+				loadQuestion(nextFloor);
+			}
+		} else {
+			// Wrong answer feedback
+			alert("Incorrect! Try again.");
+		}
+	};
+
+	const resetGame = (): void => {
+		setCurrentFloor(0);
+		setGameWon(false);
+		loadQuestion(0);
+	};
+
+	return (
+		<View className="flex-1">
+			<ImageBackground source={images.profileBackground} className="w-full h-full " resizeMode="cover">
+				<View className="mx-6 flex flex-col justify-start items-center">
+					<View className="flex flex-row justify-center items-center w-full">
+						<Image source={images.aiHostSmall} className="pr-4" />
+						<View className="flex-1 justify-center items-center bg-grey-200/30 py-4 px-6 rounded-3xl border border-blue-200">
+							<Text className="text-white font-righteous">{currentQuestion}</Text>
+						</View>
+					</View>
+					<View className="w-full flex flex-row flex-wrap justify-between">
+						{options.map((option, index) => (
+							<TouchableOpacity
+								key={index}
+								onPress={() => handleAnswer(option)}
+								activeOpacity={0.8}
+								className="bg-grey-200/10 border border-blue-200 rounded-3xl py-3 w-[48%] flex justify-center items-center mt-4"
+							>
+								<Text className="text-xl font-righteous text-grey-200 uppercase" style={{ lineHeight: 60 }}>
+									{option}
+								</Text>
+							</TouchableOpacity>
+						))}
+					</View>
+				</View>
+				<FloorGrid currentFloor={currentFloor} totalFloors={totalFloors} />
+			</ImageBackground>
+		</View>
+	);
 }

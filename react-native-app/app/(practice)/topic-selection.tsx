@@ -48,7 +48,7 @@ export default function TopicSelection() {
 		if (selectedTopics.length > 0) {
 			// Navigate to difficulty selection with selected topics
 			router.push({
-				pathname: "/difficulty-selection",
+				pathname: "/practice",
 				params: { topics: JSON.stringify(selectedTopics) },
 			});
 		}
@@ -59,8 +59,8 @@ export default function TopicSelection() {
 			<BackButton />
 			<View className="flex-1 p-6">
 				<View className="flex-1 justify-center">
-					<Text className="text-white text-3xl font-righteous text-center mb-8">Select Topics</Text>
-					<Text className="text-white text-lg font-righteous text-center mb-6">Choose up to 3 topics for your game</Text>
+					<Text className="text-white text-3xl font-righteous text-center mb-8">Select a Topic to Practice</Text>
+					<Text className="text-white text-lg font-righteous text-center mb-6">Choose up to 3 topics for your </Text>
 
 					<View className="space-y-4 mb-8">
 						{topics.map((topic) => (
