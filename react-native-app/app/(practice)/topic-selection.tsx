@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { View, Text, TouchableOpacity, ImageBackground } from "react-native";
 import { router, Redirect } from "expo-router";
+import { Audio } from 'expo-av';
 import images from "@/constants/images";
 import { useAuth } from "@/lib/auth/authContext";
 import { topics } from "@/constants/data";
@@ -54,6 +55,16 @@ export default function TopicSelection() {
 		}
 	};
 
+	const playButtonClickSound = async () => {
+		try {
+			const sound = new Audio.Sound();
+			await sound.loadAsync(require("../../assets/audio/button_click.mp3")); 
+			await sound.playAsync();
+		} catch (error) {
+			console.error("Error playing button click sound", error);
+		}
+	};
+
 	return (
 		<ImageBackground source={images.profileBackground} className="w-full h-full" resizeMode="cover">
 			<BackButton />
@@ -69,7 +80,10 @@ export default function TopicSelection() {
 					</View>
 
 					<TouchableOpacity
-						onPress={handleNext}
+						onPress={async () => {
+							await playButtonClickSound();
+							await handleNext();
+						}}
 						disabled={selectedTopics.length === 0}
 						className={`bg-black-100 border-2 border-blue-100 rounded-3xl p-4 ${selectedTopics.length === 0 ? "opacity-50" : ""}`}
 					>

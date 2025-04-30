@@ -2,6 +2,7 @@ import { View, Text, ImageBackground, TextInput, TouchableOpacity, Alert, Keyboa
 import { useState, useEffect } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
+import { Audio } from 'expo-av';
 
 import images from "@/constants/images";
 import { registerUser } from "@/lib/user/userApi";
@@ -83,6 +84,16 @@ const SignUp = () => {
 		}
 	};
 
+	const playButtonClickSound = async () => {
+		try {
+			const sound = new Audio.Sound();
+			await sound.loadAsync(require("../../assets/audio/button_click.mp3")); 
+			await sound.playAsync();
+		} catch (error) {
+			console.error("Error playing button click sound", error);
+		}
+	};
+
 	return (
 		<KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} className="flex-1">
 			<ImageBackground source={images.mainBackground} className="w-full h-full" resizeMode="cover">
@@ -148,7 +159,10 @@ const SignUp = () => {
 							className={`w-1/2 flex justify-center items-center bg-black-100 rounded-3xl py-3 mb-5 border-2 border-blue-100 ${
 								loading ? "opacity-50" : ""
 							}`}
-							onPress={handleSignUp}
+							onPress={async () => {
+								await playButtonClickSound();
+								await handleSignUp();
+							}}
 							disabled={loading}
 						>
 							<Text className="text-grey-200 font-righteous uppercase">{loading ? "Signing Up..." : "Sign Up"}</Text>
