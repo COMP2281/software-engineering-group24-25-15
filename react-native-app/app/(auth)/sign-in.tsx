@@ -2,7 +2,7 @@ import { View, Text, ImageBackground, TextInput, TouchableOpacity, Alert, Keyboa
 import { useState, useEffect } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { Audio } from 'expo-av';
+import { Audio } from "expo-av";
 
 import images from "@/constants/images";
 import { useAuth } from "@/lib/auth/authContext";
@@ -62,7 +62,7 @@ const SignIn = () => {
 	const playButtonClickSound = async () => {
 		try {
 			const sound = new Audio.Sound();
-			await sound.loadAsync(require("../../assets/audio/button_click.mp3")); 
+			await sound.loadAsync(require("@/assets/audio/button_click.mp3"));
 			await sound.playAsync();
 		} catch (error) {
 			console.error("Error playing button click sound", error);
@@ -85,9 +85,6 @@ const SignIn = () => {
 								placeholderTextColor="#666"
 								autoCapitalize="none"
 							/>
-							<TouchableOpacity onPress={() => {}} className="mt-1">
-								<Text className="text-blue-300 text-xs font-bold w-4/5">Forgotten Username?</Text>
-							</TouchableOpacity>
 						</View>
 						<View className="w-4/5 flex flex-col mb-6">
 							<View className="px-4 bg-black-100 border-2 border-blue-100 rounded-2xl flex flex-row justify-between items-center">
@@ -103,7 +100,12 @@ const SignIn = () => {
 								/>
 								<MaterialCommunityIcons name={showPassword ? "eye-off" : "eye"} size={24} color="#aaa" onPress={toggleShowPassword} />
 							</View>
-							<TouchableOpacity onPress={() => {}} className="mt-1">
+							<TouchableOpacity
+								onPress={() => {
+									router.push("/reset-password");
+								}}
+								className="mt-1"
+							>
 								<Text className="text-blue-300 text-xs font-bold">Forgotten Password?</Text>
 							</TouchableOpacity>
 						</View>

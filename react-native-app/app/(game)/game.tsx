@@ -11,6 +11,14 @@ interface Question {
 	correctAnswer: string;
 }
 
+const Timer = ({ timeLeft }: { timeLeft: number }) => {
+	return (
+		<View className="absolute top-1/2 right-1/2 translate-x-[50%] z-10 -translate-y-[75%] bg-gray-800/70 px-4 py-2 rounded-full">
+			<Text className="text-white font-righteous text-lg">{timeLeft}</Text>
+		</View>
+	);
+};
+
 const FloorGrid = ({ currentFloor, totalFloors }: { currentFloor: number; totalFloors: number }) => {
 	const translateY = useRef(new Animated.Value(0)).current;
 	const [containerHeight, setContainerHeight] = useState<number>(0); // State to store parent height
@@ -73,17 +81,40 @@ const FloorGrid = ({ currentFloor, totalFloors }: { currentFloor: number; totalF
 		</View>
 	);
 };
+
 export default function Game() {
 	const [currentFloor, setCurrentFloor] = useState<number>(0);
 	const [currentQuestion, setCurrentQuestion] = useState<string | null>(null);
 	const [options, setOptions] = useState<string[]>([]);
 	const [gameWon, setGameWon] = useState<boolean>(false);
+	const [timeLeft, setTimeLeft] = useState<number>(30); // Moved timeLeft state inside component
 	const totalFloors = questions.length;
 
 	useEffect(() => {
 		// Set initial question
 		loadQuestion(0);
 	}, []);
+
+	// Add timer effect inside component
+	useEffect(() => {
+		if (timeLeft > 0 && !gameWon) {
+			const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+			return () => clearTimeout(timer);
+		} else if (timeLeft === 0 && !gameWon) {
+			alert("Time's up! Moving to the next question.");
+			const nextFloor = currentFloor + 1;
+
+			if (nextFloor >= totalFloors) {
+				setGameWon(true);
+				setCurrentQuestion("Congratulations! You reached the top!");
+				setOptions([]);
+			} else {
+				setCurrentFloor(nextFloor);
+				loadQuestion(nextFloor);
+				setTimeLeft(30); // Reset timer for the next question
+			}
+		}
+	}, [timeLeft, currentFloor, gameWon, totalFloors]);
 
 	const loadQuestion = (floorNum: number): void => {
 		if (floorNum >= questions.length) {
@@ -95,6 +126,7 @@ export default function Game() {
 		const questionData: Question = questions[floorNum];
 		setCurrentQuestion(questionData.question);
 		setOptions(questionData.options);
+		setTimeLeft(30); // Reset timer when loading a new question
 	};
 
 	const handleAnswer = (answer: string): void => {
@@ -102,7 +134,6 @@ export default function Game() {
 
 		if (answer === correctAnswer) {
 			const nextFloor = currentFloor + 1;
-
 			setCurrentFloor(nextFloor);
 
 			if (nextFloor >= totalFloors) {
@@ -121,6 +152,7 @@ export default function Game() {
 	const resetGame = (): void => {
 		setCurrentFloor(0);
 		setGameWon(false);
+		setTimeLeft(30); // Reset timer when resetting game
 		loadQuestion(0);
 	};
 
@@ -149,6 +181,8 @@ export default function Game() {
 						))}
 					</View>
 				</View>
+
+				{!gameWon && <Timer timeLeft={timeLeft} />}
 				<FloorGrid currentFloor={currentFloor} totalFloors={totalFloors} />
 			</ImageBackground>
 		</View>

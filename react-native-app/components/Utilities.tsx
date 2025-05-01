@@ -3,6 +3,7 @@ import { router } from "expo-router";
 
 import icons from "@/constants/icons";
 import AddFriend from "./../app/(friends)/add-friend";
+import { useEffect, useState } from "react";
 
 export const BackButton = () => (
 	<TouchableOpacity onPress={() => router.back()} className="absolute top-6 left-6">
@@ -27,3 +28,21 @@ export const Logo = ({ height }: { height?: string }) => (
 		<Text className="uppercase tracking-[10px] -rotate-2 text-6xl text-gray-100 font-olibrick ml-40">Tower</Text>
 	</View>
 );
+
+export const Timer = ({ time }: { time: number }) => {
+	const [currentTime, setCurrentTime] = useState(time);
+
+	useEffect(() => {
+		const interval = setInterval(() => {
+			setCurrentTime((prevTime) => (prevTime > 0 ? prevTime - 1 : 0));
+		}, 1000);
+
+		return () => clearInterval(interval);
+	}, []);
+
+	return (
+		<View className="absolute top-6 right-6 flex flex-row items-center">
+			<Text className="text-white text-2xl font-bold ml-2">{currentTime}</Text>
+		</View>
+	);
+};
