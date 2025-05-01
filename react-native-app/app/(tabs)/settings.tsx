@@ -1,6 +1,8 @@
 import { View, Text, ImageBackground, Image, TouchableOpacity, ScrollView, ImageSourcePropType } from "react-native";
 import { router } from "expo-router";
 import { useAuth } from "@/lib/auth/authContext";
+import { useState, useEffect } from "react";
+import AudioManager from "../audio-manager";
 
 import images from "@/constants/images";
 import icons from "@/constants/icons";
@@ -31,11 +33,16 @@ const SettingsItem = ({ icon, title, onPress, textStyle, showArrow = true, tintC
 
 const Settings = () => {
 	const { logout, username } = useAuth();
-	const muted = false;
+	const [muted, setMuted] = useState(AudioManager.getMuted());
 
 	const handleLogout = () => {
 		logout();
 		router.push("/sign-in");
+	};
+
+	const handleToggleMute = async () => {
+		await AudioManager.toggleMute();
+		setMuted(AudioManager.getMuted());
 	};
 
 	return (
@@ -67,7 +74,7 @@ const Settings = () => {
 						))}
 					</View>
 					<View className="flex flex-col mt-5 border-t pt-5 border-white">
-						<SettingsItem icon={muted ? icons.mute : icons.volume} title="Sound" onPress={() => {}} showArrow={false} />
+						<SettingsItem icon={muted ? icons.mute : icons.volume} title="Sound" onPress={handleToggleMute} showArrow={false} />
 						<SettingsItem icon={icons.logout} title="Logout" onPress={handleLogout} showArrow={false} tintColor="#ef4444" />
 					</View>
 				</ScrollView>
