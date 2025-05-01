@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, ImageBackground } from "react-native";
 import { router, useLocalSearchParams, Redirect } from "expo-router";
+import { Audio } from 'expo-av';
 import { useAuth } from "@/lib/auth/authContext";
 import images from "@/constants/images";
-import BackButton from "@/components/Buttons";
+import { BackButton } from "@/components/Utilities";
 
 export type Difficulty = "Easy" | "Medium" | "Hard";
 
@@ -53,6 +54,16 @@ export default function DifficultySelection() {
 		}
 	};
 
+	const playButtonClickSound = async () => {
+		try {
+			const sound = new Audio.Sound();
+			await sound.loadAsync(require("../../assets/audio/button_click.mp3")); 
+			await sound.playAsync();
+		} catch (error) {
+			console.error("Error playing button click sound", error);
+		}
+	};
+
 	return (
 		<ImageBackground source={images.profileBackground} className="w-full h-full" resizeMode="cover">
 			<BackButton />
@@ -74,7 +85,10 @@ export default function DifficultySelection() {
 					</View>
 
 					<TouchableOpacity
-						onPress={handleStartGame}
+						onPress={async () => {
+							await playButtonClickSound();
+							await handleStartGame();
+						}}
 						disabled={!selectedDifficulty}
 						className={`bg-black-100 border-2 border-blue-100 rounded-3xl p-4 ${!selectedDifficulty ? "opacity-50" : ""}`}
 					>

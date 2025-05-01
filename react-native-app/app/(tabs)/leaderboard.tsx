@@ -3,6 +3,8 @@ import { useState } from "react";
 
 import images from "@/constants/images";
 import icons from "@/constants/icons";
+import { router } from "expo-router";
+import { AddFriendButton } from "@/components/Utilities";
 
 interface Tab {
 	title: string;
@@ -68,12 +70,10 @@ const Leaderboard = () => {
 	return (
 		<View className="flex-1">
 			<ImageBackground source={images.leaderboardBackground} className="w-full h-full" resizeMode="cover">
+				<AddFriendButton />
 				<View className="flex-1">
 					<View className="flex-row justify-between items-center px-4 py-6">
 						<Text className="text-white text-3xl font-righteous">Leaderboard</Text>
-						<TouchableOpacity onPress={() => {}} className="mr-4">
-							<Image source={icons.addFriend} className="size-6" tintColor={"#fff"} />
-						</TouchableOpacity>
 					</View>
 					<View className="flex-row bg-transparent">
 						<Tab title="Friends" active={activeTab === "friends"} onPress={() => setActiveTab("friends")} />

@@ -1,5 +1,5 @@
 import { API_URL } from "@/constants/config";
-import { getMockQuestions, getMockIntroduction } from "@/app/mock-data";
+import { getMockQuestions, getMockIntroduction } from "./mockQuestions";
 
 // Interface for Question from the API
 export interface Question {
@@ -28,15 +28,13 @@ export const getQuestions = async (token: string, category: string, n: number = 
 	try {
 		console.log(`Fetching questions for category: ${category}, count: ${n}, hint: ${includeHint}`);
 
-		// Build URL with query parameters instead of using a body
 		const url = `${API_URL}/game/questions/?category=${encodeURIComponent(category)}&n=${n}&hint=${includeHint}`;
 
 		const response = await fetch(url, {
-			method: "GET", // Use GET as intended
+			method: "GET",
 			headers: {
 				Authorization: `JWT ${token}`,
 			},
-			// No body with GET request
 		});
 
 		if (!response.ok) {

@@ -11,6 +11,7 @@ import secrets
 import string
 from django.core.mail import send_mail
 from django.conf import settings
+from rest_framework.permissions import IsAuthenticated
 
 from rest_framework import status
 from django.contrib.auth import get_user_model
@@ -132,12 +133,20 @@ class CheckUserActivationView(APIView):
 
 class UserRetrieveView(APIView):
     """
-    API to retrieve user's email and ID by username and password.
+    API to retrieve user's email and ID by providing username, authenticated via token.
     """
+    permission_classes = [IsAuthenticated]
+
     def post(self, request, *args, **kwargs):
-        serializer = UserObtainEmailSerializer(data=request.data)
-        
-        if serializer.is_valid():
-            return Response(serializer.validated_data, status=status.HTTP_200_OK)
-        
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        username = request.data.get("username")
+
+        if not username:
+            return Response({"detail": "Username is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        if request.user.username != username:
+            return Response({"detail": "Provided username does not match authenticated user."}, status=status.HTTP_403_FORBIDDEN)
+
+        return Response({
+            "id": request.user.id,
+            "email": request.user.email
+        }, status=status.HTTP_200_OK)

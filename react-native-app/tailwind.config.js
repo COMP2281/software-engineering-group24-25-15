@@ -9,8 +9,12 @@ module.exports = {
 				olibrick: ["Olibrick", "serif"],
 			},
 			colors: {
+				floor: {
+					DEFAULT: "#2C2E39",
+				},
 				black: {
 					DEFAULT: "#000000",
+					50: "#00000033",
 					100: "#00000091",
 				},
 				grey: {

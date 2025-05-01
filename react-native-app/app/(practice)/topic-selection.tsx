@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { View, Text, TouchableOpacity, ImageBackground } from "react-native";
 import { router, Redirect } from "expo-router";
+import { Audio } from 'expo-av';
 import images from "@/constants/images";
 import { useAuth } from "@/lib/auth/authContext";
 import { topics } from "@/constants/data";
-import BackButton from "@/components/Buttons";
+import { BackButton } from "@/components/Utilities";
 
 interface TopicButtonProps {
 	topic: string;
@@ -48,9 +49,19 @@ export default function TopicSelection() {
 		if (selectedTopics.length > 0) {
 			// Navigate to difficulty selection with selected topics
 			router.push({
-				pathname: "/difficulty-selection",
+				pathname: "/practice",
 				params: { topics: JSON.stringify(selectedTopics) },
 			});
+		}
+	};
+
+	const playButtonClickSound = async () => {
+		try {
+			const sound = new Audio.Sound();
+			await sound.loadAsync(require("../../assets/audio/button_click.mp3")); 
+			await sound.playAsync();
+		} catch (error) {
+			console.error("Error playing button click sound", error);
 		}
 	};
 
@@ -59,8 +70,8 @@ export default function TopicSelection() {
 			<BackButton />
 			<View className="flex-1 p-6">
 				<View className="flex-1 justify-center">
-					<Text className="text-white text-3xl font-righteous text-center mb-8">Select Topics</Text>
-					<Text className="text-white text-lg font-righteous text-center mb-6">Choose up to 3 topics for your game</Text>
+					<Text className="text-white text-3xl font-righteous text-center mb-8">Select a Topic to Practice</Text>
+					<Text className="text-white text-lg font-righteous text-center mb-6">Choose up to 3 topics for your </Text>
 
 					<View className="space-y-4 mb-8">
 						{topics.map((topic) => (
@@ -69,7 +80,10 @@ export default function TopicSelection() {
 					</View>
 
 					<TouchableOpacity
-						onPress={handleNext}
+						onPress={async () => {
+							await playButtonClickSound();
+							await handleNext();
+						}}
 						disabled={selectedTopics.length === 0}
 						className={`bg-black-100 border-2 border-blue-100 rounded-3xl p-4 ${selectedTopics.length === 0 ? "opacity-50" : ""}`}
 					>
