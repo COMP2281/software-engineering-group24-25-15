@@ -5,7 +5,8 @@ from rest_framework import status, generics, permissions
 import random
 
 from .models import Question, Statistics
-from .serializers import QuestionSerializer, StatisticsSerializer
+from .serializers import QuestionSerializer, StatisticsSerializer, UserStatisticsListSerializer
+from rest_framework.views import APIView
 
 from .aihost import generate_hint, model_request
 
@@ -89,3 +90,16 @@ class UserStatisticsDetailView(generics.RetrieveAPIView):
     serializer_class = StatisticsSerializer
     permission_classes = [permissions.IsAuthenticated]  
     lookup_field = "user_id"
+
+
+class AllUserStatisticsView(APIView):
+    """
+    Returns a list of all users with their statistics, sorted by wins (descending).
+    Requires authentication.
+    """
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        stats = Statistics.objects.select_related('user').order_by('-wins')
+        serializer = UserStatisticsListSerializer(stats, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
