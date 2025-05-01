@@ -24,21 +24,20 @@ export default function Index() {
 
 	// If not logged in, redirect to sign-in
 	if (!isAuthenticated) {
-		return <Redirect href="/(auth)/sign-in" />;
+		return <Redirect href="/sign-in" />;
 	}
 
 	return (
-		<View>
-			<ImageBackground source={images.mainBackground} className="w-full h-full" resizeMode="cover" />
-			<View className="absolute h-full w-full top-0 flex items-center justify-center pt-32">
-				<View className="w-full h-1/3 flex justify-center items-center">
-					<Text className="uppercase font-righteous text-5xl text-white">Logo</Text>
-				</View>
-				<View className="w-full h-1/2 flex justify-center items-center">
-					<MenuButton text="Game" onPress={() => router.push("/topic-selection")} />
-					<MenuButton text="Practise" onPress={() => router.push("/practise")} />
+		<>
+			<View>
+				<ImageBackground source={images.mainBackground} className="w-full h-full" resizeMode="cover" />
+				<View className="absolute h-full w-full top-0 flex items-center justify-center pt-32">
+					<View className="w-full h-1/2 flex justify-center items-center">
+						<MenuButton text="Game" onPress={() => router.push("/game")} />
+						<MenuButton text="Practice" onPress={() => router.push("/topic-selection")} />
+					</View>
 				</View>
 			</View>
-		</View>
+		</>
 	);
 }

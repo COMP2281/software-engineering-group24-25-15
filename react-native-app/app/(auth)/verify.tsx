@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity, ImageBackground, Alert, TextInput } from "react-native";
 import { useLocalSearchParams, router } from "expo-router";
 import { useState } from "react";
+import { Audio } from 'expo-av';
 import { checkVerifiedEmail, resendEmail } from "@/lib/user/userApi";
 import images from "@/constants/images";
 
@@ -84,6 +85,16 @@ const VerifyEmail = () => {
 		}
 	};
 
+	const playButtonClickSound = async () => {
+		try {
+			const sound = new Audio.Sound();
+			await sound.loadAsync(require("../../assets/audio/button_click.mp3")); 
+			await sound.playAsync();
+		} catch (error) {
+			console.error("Error playing button click sound", error);
+		}
+	};
+
 	return (
 		<View className="flex-1">
 			<ImageBackground source={images.mainBackground} className="w-full h-full" resizeMode="cover" />
@@ -115,8 +126,18 @@ const VerifyEmail = () => {
 					/>
 				</View>
 
-				<Button text="Check Verification" onPress={handleVerification} loading={verifyLoading} />
-				<Button text="Resend Email" onPress={handleResendEmail} loading={resendLoading} />
+				<Button text="Check Verification" 
+				onPress={async () => {
+					await playButtonClickSound();
+					await handleVerification();
+				}} 
+				loading={verifyLoading} />
+				<Button text="Resend Email" 
+				onPress={async () => {
+					await playButtonClickSound();
+					await handleResendEmail();
+				}} 
+				loading={resendLoading} />
 
 				<TouchableOpacity className="mt-8" onPress={() => router.replace("/sign-in")}>
 					<Text className="text-blue-100 font-righteous">Back to Sign In</Text>

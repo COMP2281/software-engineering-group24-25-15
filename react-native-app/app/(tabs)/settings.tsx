@@ -1,10 +1,13 @@
 import { View, Text, ImageBackground, Image, TouchableOpacity, ScrollView, ImageSourcePropType } from "react-native";
 import { router } from "expo-router";
 import { useAuth } from "@/lib/auth/authContext";
+import { useState, useEffect } from "react";
+import AudioManager from "../audio-manager";
 
 import images from "@/constants/images";
 import icons from "@/constants/icons";
-import { settings } from "@/constants/data";
+import { settings, friends } from "@/constants/data";
+import { AddFriendButton } from "@/components/Utilities";
 
 interface SettingsItemProps {
 	icon: ImageSourcePropType;
@@ -28,23 +31,26 @@ const SettingsItem = ({ icon, title, onPress, textStyle, showArrow = true, tintC
 	);
 };
 
-const Profile = () => {
+const Settings = () => {
 	const { logout, username } = useAuth();
-	const muted = false;
+	const [muted, setMuted] = useState(AudioManager.getMuted());
 
 	const handleLogout = () => {
 		logout();
 		router.push("/sign-in");
 	};
 
+	const handleToggleMute = async () => {
+		await AudioManager.toggleMute();
+		setMuted(AudioManager.getMuted());
+	};
+
 	return (
 		<View className="h-full bg-white">
 			<ImageBackground source={images.leaderboardBackground} className="w-full h-full px-7" resizeMode="cover">
+				<AddFriendButton />
 				<View className="flex-row justify-between items-center py-6">
-					<Text className="text-white text-3xl font-righteous">Profile</Text>
-					<TouchableOpacity onPress={() => {}} className="mr-4">
-						<Image source={icons.addFriend} className="size-6" tintColor={"#fff"} />
-					</TouchableOpacity>
+					<Text className="text-white text-3xl font-righteous">Settings</Text>
 				</View>
 
 				<ScrollView showsHorizontalScrollIndicator={false}>
@@ -58,20 +64,18 @@ const Profile = () => {
 						</View>
 					</View>
 					<View className="flex flex-col mt-5 border-t pt-5 border-white">
+						{friends.slice().map((item, index) => (
+							<SettingsItem key={index} {...item} />
+						))}
+					</View>
+					<View className="flex flex-col mt-5 border-t pt-5 border-white">
 						{settings.slice().map((item, index) => (
 							<SettingsItem key={index} {...item} />
 						))}
 					</View>
 					<View className="flex flex-col mt-5 border-t pt-5 border-white">
-						<SettingsItem icon={muted ? icons.mute : icons.volume} title="Sound" onPress={() => {}} showArrow={false} />
-						<SettingsItem
-							icon={icons.logout}
-							title="Logout"
-							onPress={handleLogout}
-							textStyle="text-red-500"
-							showArrow={false}
-							tintColor="#ef4444"
-						/>
+						<SettingsItem icon={muted ? icons.mute : icons.volume} title="Sound" onPress={handleToggleMute} showArrow={false} />
+						<SettingsItem icon={icons.logout} title="Logout" onPress={handleLogout} showArrow={false} tintColor="#ef4444" />
 					</View>
 				</ScrollView>
 			</ImageBackground>
@@ -79,4 +83,4 @@ const Profile = () => {
 	);
 };
 
-export default Profile;
+export default Settings;

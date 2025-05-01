@@ -3,6 +3,7 @@ import { View, Image, ActivityIndicator, StyleSheet, Text } from "react-native";
 import { Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
+import AudioManager from './audio-manager';
 
 import { AuthProvider } from "@/lib/auth/authContext";
 import icons from "@/constants/icons";
@@ -22,6 +23,7 @@ const Preloader = ({ children }: { children: React.ReactNode }) => {
 
 	const [fontsLoaded] = useFonts({
 		"Righteous-Regular": require("../assets/fonts/Righteous-Regular.ttf"),
+		Olibrick: require("../assets/fonts/Olibrick.ttf"),
 	});
 
 	useEffect(() => {
@@ -60,7 +62,9 @@ const Preloader = ({ children }: { children: React.ReactNode }) => {
 		if (fontsLoaded) {
 			loadAssets();
 		}
+		AudioManager.loadAndPlayAsync(require('../assets/audio/main_menu.mp3'));
 	}, [fontsLoaded]);
+
 
 	if (!fontsLoaded || isLoading) {
 		return (
@@ -82,9 +86,7 @@ const Preloader = ({ children }: { children: React.ReactNode }) => {
 				statusBarStyle: "light",
 				statusBarBackgroundColor: "black",
 			}}
-		>
-			{children}
-		</Stack>
+		/>
 	);
 };
 
@@ -115,7 +117,7 @@ export default function RootLayout() {
 						statusBarStyle: "light",
 						statusBarBackgroundColor: "black",
 					}}
-				></Stack>
+				/>
 			</Preloader>
 		</AuthProvider>
 	);

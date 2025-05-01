@@ -1,6 +1,5 @@
 import { ApiError } from "../auth/authApi";
-
-const API_URL = "http://192.168.0.5:8000";
+import { API_URL } from "../../constants/config";
 
 export interface RegisterUserData {
 	username: string;
@@ -96,5 +95,29 @@ export const resendEmail = async (email: string): Promise<{ success: boolean }> 
 			throw new Error(`Email resend failed: ${error.message}`);
 		}
 		throw new Error("Email resend failed: Unknown error");
+	}
+};
+
+export const resetPassword = async (email: string): Promise<{ success: boolean }> => {
+	try {
+		const response = await fetch(`${API_URL}/auth/users/custom_reset_password/`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ email }),
+		});
+
+		if (!response.ok) {
+			const errorData = await response.json();
+			throw new Error(errorData.detail || errorData.message || "Failed to reset password");
+		}
+
+		return { success: true };
+	} catch (error) {
+		if (error instanceof Error) {
+			throw new Error(`Password reset failed: ${error.message}`);
+		}
+		throw new Error("Password reset failed: Unknown error");
 	}
 };
