@@ -73,40 +73,77 @@ export const getQuestions = async (token: string, category: string, n: number = 
 
 // Get AI response for topic introduction with fallback to mock data
 export const getAIResponse = async (token: string, prompt: string) => {
-	// Try to extract topic from new prompt format: "quiz about <topic>."
+	// Try to extract topic from prompt format
 	const topicMatch = prompt.match(/quiz about (.*?)\./i) || prompt.match(/Introduce the topic of (.*?) in/i);
 	const topic = topicMatch ? topicMatch[1] : "";
 
 	try {
-		console.log(`Fetching AI response for prompt: ${prompt.substring(0, 50)}...`);
+		console.log(`Fetching AI response for prompt: ${prompt}`);
+		
+		// Ensure the URL is correctly constructed and encoded
 		const url = `${API_URL}/game/responce/?request=${encodeURIComponent(prompt)}`;
+		console.log("Request URL:", url);
+		
 		const response = await fetch(url, {
 			method: "GET",
 			headers: {
 				Authorization: `JWT ${token}`,
+				"Accept": "application/json",
 			},
 		});
 
+		// Log the response status for debugging
+		console.log(`AI response status: ${response.status}`);
+
 		if (!response.ok) {
-			console.log(`AI response request failed with status ${response.status}, using mock data`);
+			console.error(`AI response request failed with status ${response.status}`);
 			return topic ? getMockIntroduction(topic) : "I'm your AI host for today's game. Let's test your knowledge!";
 		}
 
-		const data = await response.json();
-		console.log("Successfully fetched AI response:", data);
+		// Get the response text or JSON
+		const responseData = await response.text();
+		console.log("Raw AI response:", responseData);
+		
+		// Try to parse as JSON if possible
+		let data;
+		try {
+			data = JSON.parse(responseData);
+		} catch (e) {
+			// If not JSON, use the raw text
+			data = responseData;
+		}
 
-		const responseText = typeof data === "string" ? data : data.response || data.toString();
+		// Extract the actual response text
+		const responseText = typeof data === "string" ? data : (
+			data?.response || 
+			(typeof data === "object" ? JSON.stringify(data) : data.toString())
+		);
+		
+		console.log("Processed AI response:", responseText);
 
-		// Generic response detection (removed /welcome/i)
-		const genericResponses = [/how can i assist you/i, /how may i help you/i, /i'm here to help/i, /hello|hi|hey/i];
+		// Improved generic response detection - only filter out very obvious generic responses
+		const genericResponses = [
+			/^how can i assist you/i, 
+			/^how may i help you/i, 
+			/^i'm here to help/i, 
+			/^hello\s+there/i,
+			/^hi\s+there/i
+		];
 
+		// Check if this is a generic response (starts with generic phrase AND is very short)
 		const isGenericResponse =
-			genericResponses.some((pattern) => pattern.test(responseText)) &&
-			// If the text is very short or only one of the generic phrases, fallback
-			responseText.trim().split(" ").length < 5;
+			genericResponses.some((pattern) => pattern.test(responseText.trim())) &&
+			responseText.trim().split(/\s+/).length < 8; // More generous length threshold
 
 		if (isGenericResponse && topic) {
-			console.log("Received generic AI response, using mock introduction instead");
+			console.log("Detected generic AI response:", responseText);
+			console.log("Falling back to mock introduction for topic:", topic);
+			return getMockIntroduction(topic);
+		}
+
+		// If response is too short (likely error), fallback to mock
+		if (responseText.trim().length < 15 && topic) {
+			console.log("AI response too short, using mock data");
 			return getMockIntroduction(topic);
 		}
 
