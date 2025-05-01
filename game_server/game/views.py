@@ -13,9 +13,10 @@ from .aihost import generate_hint, model_request
 @permission_classes([IsAuthenticated])
 def get_questions(request):
     
-    category_param = request.data.get('category', None)
-    n_param = request.data.get('n')
-    hint_param = request.data.get('hint', False)  
+    # Use query_params instead of data for GET requests
+    category_param = request.query_params.get('category', None)
+    n_param = request.query_params.get('n')
+    hint_param = request.query_params.get('hint', 'false')  
 
     if str(hint_param).lower() in ['true', '1']:
         hint_param = True
@@ -23,9 +24,10 @@ def get_questions(request):
         hint_param = False
 
     try:
-        n = int(n_param)
+        # Default to 3 questions
+        n = int(n_param) if n_param is not None else 3
     except (TypeError, ValueError):
-        n = 2  
+        n = 3  
 
     if category_param:
         questions_qs = Question.objects.filter(category=category_param)
@@ -46,7 +48,6 @@ def get_questions(request):
     serializer = QuestionSerializer(selected_questions, many=True)
     data = serializer.data  
 
-
     if hint_param:
         for i, question_data in enumerate(data):
             question_obj = selected_questions[i]
@@ -55,11 +56,11 @@ def get_questions(request):
     return Response(data, status=status.HTTP_200_OK)
 
 
-
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_responce(request):
-    user_request = request.data.get('request', None)
+    # Use query_params instead of data for GET requests
+    user_request = request.query_params.get('request', None)
     
     model_responce = model_request(user_request)
     
@@ -87,4 +88,4 @@ class UserStatisticsDetailView(generics.RetrieveAPIView):
     queryset = Statistics.objects.all()
     serializer_class = StatisticsSerializer
     permission_classes = [permissions.IsAuthenticated]  
-    lookup_field = "user_id"  
+    lookup_field = "user_id"
