@@ -1,3 +1,0 @@
-GET http://127.0.0.1:8000/friends/requests/received/
-Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQxNzM4ODA1LCJpYXQiOjE3NDE3MjA4MDUsImp0aSI6Ijk0NDllN2U3MmM5YjRiMzJhYTc0NGNjNWRhMWViZjQ1IiwidXNlcl9pZCI6MzZ9.CzXY_9VlpTK5cSnytSTjr7PLk5WOVye51Q7yE_YMHXY
-Content-Type: application/json

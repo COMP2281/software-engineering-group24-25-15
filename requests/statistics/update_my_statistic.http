@@ -1,7 +1,0 @@
-PATCH  http://127.0.0.1:8000/game/my-statistics/
-Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQxODAwODc4LCJpYXQiOjE3NDE3ODI4NzgsImp0aSI6IjY0Y2Y3NmYxYjZhMjQzZTJiN2ZlYTQwMTRlNWEzOTE3IiwidXNlcl9pZCI6NDd9.rDYFbu4WxCZovQf9hVjgF9p7tycvNXdeWCHyIseegEA
-Content-Type: application/json
-
-{
-  "score": 50
-}

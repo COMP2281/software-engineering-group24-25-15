@@ -1,9 +1,0 @@
-GET http://127.0.0.1:8000/game/user-statistics/all/
-Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2MTU0NjU0LCJpYXQiOjE3NDYxMzY2NTQsImp0aSI6Ijk0NDY4OTBjYzUyMDQ0ZWM5ODMzZGFhNjY1YTg0OTUzIiwidXNlcl9pZCI6MjF9.BrYogjVijT_9eu_0NgDLlO9tx4caDa9_-C8oPAT6jzc
-Type: application/json
-
-{
-   
-}
-
-
