@@ -1,7 +1,0 @@
-POST http://127.0.0.1:8000/accounts/retrieve-user/
-Authorization: JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2MTI4MDg2LCJpYXQiOjE3NDYxMTAwODYsImp0aSI6IjhhNTFkNTMxZTgxNTQyYTA5NTExYzRlNWM5NzUxZjQ0IiwidXNlcl9pZCI6NDd9.ltIH8S5Vw13BxvZ3Mz7Ce5YgmBpuNzCJ4DJxwKxLv7U
-Content-Type: application/json
-
-{
-    "username": "testkyryl"
-}

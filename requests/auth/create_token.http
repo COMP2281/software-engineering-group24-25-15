@@ -1,9 +1,0 @@
-POST http://127.0.0.1:8000/auth/jwt/create
-Content-Type: application/json
-
-{
-    "username": "jamwill2",
-    "password": "qwerty1234@"
-}
-
-

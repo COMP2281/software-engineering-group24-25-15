@@ -1,7 +1,0 @@
-POST http://127.0.0.1:8000/friends/request/accept/
-Authorization: JWT <YOUR_JWT_TOKEN>
-Content-Type: application/json
-
-{
-    "friend_request_id": 12
-}

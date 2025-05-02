@@ -1,8 +1,0 @@
-POST http://192.168.174.203:8000/auth/users/resend_activation/
-Content-Type: application/json
-
-{
-    "email": "spam.jamesharvey@gmail.com"
-}
-
-
