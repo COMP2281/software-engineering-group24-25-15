@@ -5,7 +5,7 @@ import profileBackground from "@/assets/images/profile-background.png";
 import aiHost from "@/assets/images/ai-host.png";
 import aiHostSmall from "@/assets/images/ai-host-small.png";
 import floorFrame from "@/assets/images/floor-frame.png";
-import profile1 from "@/assets/images/profiles/profile_1.jpg";
+import profile1 from "@/assets/images/profiles/profile_1.png";
 import profile2 from "@/assets/images/profiles/profile_2.jpg";
 import profile3 from "@/assets/images/profiles/profile_3.jpg";
 import profile4 from "@/assets/images/profiles/profile_4.jpg";

@@ -1,66 +1,65 @@
 import { View, Text } from "react-native";
 import { ImageBackground } from "react-native";
 import images from "@/constants/images";
+import { useAuth } from "@/lib/auth/authContext";
+import { fetchStatistics } from "@/lib/api/statistics";
+import { useState, useCallback } from "react";
+import { RefreshControl, ScrollView } from "react-native";
 
-// Dummy statistics values for demonstration
-const stats = {
-	gamesPlayed: 10,
-	questionsAnswered: 50,
-	questionsCorrect: 40,
-	questionsIncorrect: 10,
-	highScore: 300,
-	totalScore: 1000,
-};
+interface StatisticsData {
+	score: number;
+	games: number;
+	wins: number;
+}
 
 export default function Statistics() {
+	const { username, token } = useAuth();
+	const [data, setData] = useState<StatisticsData>({ score: 0, games: 0, wins: 0 });
+	const [refreshing, setRefreshing] = useState(false);
+
+	// Fetch statistics data
+	const fetchData = async () => {
+		if (token) {
+			const data = await fetchStatistics(token);
+			if (data) {
+				setData(data);
+			} else {
+				console.error("Failed to fetch statistics data");
+			}
+		}
+	};
+
+	// Handle refresh
+	const onRefresh = useCallback(async () => {
+		setRefreshing(true);
+		await fetchData();
+		setRefreshing(false);
+	}, [token]);
+
+	// Render the component with a background image and scroll to refresh
 	return (
-		<ImageBackground source={images.mainBackground} className="w-full h-full" resizeMode="cover">
-			<View className="flex-1 p-4">
-				<View className="flex flex-wrap justify-between">
-					{/* Games Played */}
-					<View className="w-1/2 p-2">
-						<View className="bg-black-100 border-2 border-blue-100 rounded-3xl h-40 justify-center items-center">
-							<Text className="text-white text-2xl font-righteous">Games Played</Text>
-							<Text className="text-white text-4xl font-righteous">{stats.gamesPlayed}</Text>
+		<ImageBackground source={images.leaderboardBackground} className="w-full h-full" resizeMode="cover">
+			<ScrollView contentContainerStyle={{ flex: 1 }} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+				<View className="flex items-center justify-center w-full h-full">
+					<Text className="text-white font-righteous text-3xl">Statistics</Text>
+					<Text className="text-gray-300 font-righteous text-xl mb-10">{username}</Text>
+
+					<View className="flex flex-row justify-around items-center w-full">
+						<View className="flex items-center justify-center w-1/4 bg-gray-800 rounded-lg border-2 border-blue-300 p-4">
+							<Text className="text-white font-righteous text-2xl">Games</Text>
+							<Text className="text-gray-300 font-righteous text-2xl">{data.games}</Text>
 						</View>
-					</View>
-					{/* Questions Answered */}
-					<View className="w-1/2 p-2">
-						<View className="bg-black-100 border-2 border-blue-100 rounded-3xl h-40 justify-center items-center">
-							<Text className="text-white text-2xl font-righteous">Questions Answered</Text>
-							<Text className="text-white text-4xl font-righteous">{stats.questionsAnswered}</Text>
+						<View className="flex items-center justify-center w-1/4 bg-gray-800 rounded-lg border-2 border-blue-300 p-4">
+							<Text className="text-white font-righteous text-2xl">Score</Text>
+							<Text className="text-gray-300 font-righteous text-2xl">{data.score}</Text>
 						</View>
-					</View>
-					{/* Questions Correct */}
-					<View className="w-1/2 p-2">
-						<View className="bg-black-100 border-2 border-blue-100 rounded-3xl h-40 justify-center items-center">
-							<Text className="text-white text-2xl font-righteous">Questions Correct</Text>
-							<Text className="text-white text-4xl font-righteous">{stats.questionsCorrect}</Text>
-						</View>
-					</View>
-					{/* Questions Incorrect */}
-					<View className="w-1/2 p-2">
-						<View className="bg-black-100 border-2 border-blue-100 rounded-3xl h-40 justify-center items-center">
-							<Text className="text-white text-2xl font-righteous">Questions Incorrect</Text>
-							<Text className="text-white text-4xl font-righteous">{stats.questionsIncorrect}</Text>
-						</View>
-					</View>
-					{/* High Score */}
-					<View className="w-1/2 p-2">
-						<View className="bg-black-100 border-2 border-blue-100 rounded-3xl h-40 justify-center items-center">
-							<Text className="text-white text-2xl font-righteous">High Score</Text>
-							<Text className="text-white text-4xl font-righteous">{stats.highScore}</Text>
-						</View>
-					</View>
-					{/* Total Score */}
-					<View className="w-1/2 p-2">
-						<View className="bg-black-100 border-2 border-blue-100 rounded-3xl h-40 justify-center items-center">
-							<Text className="text-white text-2xl font-righteous">Total Score</Text>
-							<Text className="text-white text-4xl font-righteous">{stats.totalScore}</Text>
+						<View className="flex items-center justify-center w-1/4 bg-gray-800 rounded-lg border-2 border-blue-300 p-4">
+							<Text className="text-white font-righteous text-2xl">Wins</Text>
+							<Text className="text-gray-300 font-righteous text-2xl">{data.wins}</Text>
 						</View>
 					</View>
 				</View>
-			</View>
+			</ScrollView>
 		</ImageBackground>
 	);
 }

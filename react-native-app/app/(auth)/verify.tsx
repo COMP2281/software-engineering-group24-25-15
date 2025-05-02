@@ -21,7 +21,7 @@ const Button = ({ text, onPress, loading }: ButtonProps) => {
 			onPress={onPress}
 			disabled={loading}
 		>
-			<Text className="text-2xl font-righteous text-grey-200 uppercase">{loading ? "Processing..." : text}</Text>
+			<Text className="text-2xl font-righteous text-grey-200 uppercase text-center">{loading ? "Processing..." : text}</Text>
 		</TouchableOpacity>
 	);
 };

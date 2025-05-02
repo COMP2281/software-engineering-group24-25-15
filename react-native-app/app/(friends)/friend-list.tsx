@@ -8,8 +8,6 @@ import { useAuth } from "@/lib/auth/authContext";
 import { BackButton, AddFriendButton } from "@/components/Utilities";
 
 import images from "@/constants/images";
-import icons from "@/constants/icons";
-import { friendsList } from "@/constants/data";
 
 const FriendListScreen = () => {
 	const { token, isAuthenticated } = useAuth();
@@ -19,17 +17,16 @@ const FriendListScreen = () => {
 	const [refreshing, setRefreshing] = useState(false);
 
 	const loadFriends = async () => {
-		// if (!token) return;
-		// setLoading(true);
-		// try {
-		// 	const data = await fetchFriends(token);
-		// 	setFriends(data);
-		// } catch (error) {
-		// 	console.error("Error loading friends:", error);
-		// } finally {
-		// 	setLoading(false);
-		// }
-		setFriends(friendsList);
+		if (!token) return;
+		setLoading(true);
+		try {
+			const data = await fetchFriends(token);
+			setFriends(data);
+		} catch (error) {
+			console.error("Error loading friends:", error);
+		} finally {
+			setLoading(false);
+		}
 	};
 
 	// Load friends on initial render
@@ -45,10 +42,6 @@ const FriendListScreen = () => {
 		setRefreshing(false);
 	};
 
-	const navigateToRequests = () => {
-		router.push("/friend-requests");
-	};
-
 	const navigateToAddFriend = () => {
 		router.push("/add-friend");
 	};
@@ -57,19 +50,13 @@ const FriendListScreen = () => {
 		<View className="flex-row items-center p-4 mt-4 rounded-lg shadow bg-gray-700 border-blue-100">
 			<View className="w-12 h-12 rounded-full bg-gray-300 justify-center items-center relative">
 				{item.avatar ? (
-					<Image source={item.avatar} className="w-12 h-12 rounded-full" />
+					<Image source={item.avatar} className="w-12 h-12 rounded-full" resizeMode="contain" />
 				) : (
-					<Image source={images.profile1} className="w-12 h-12 rounded-full" />
+					<Image source={images.profile1} className="w-12 h-12 rounded-full" resizeMethod="scale" resizeMode="center" />
 				)}
-				<View
-					className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white ${
-						item.status === "online" ? "bg-green-500" : item.status === "in-game" ? "bg-blue-500" : "bg-gray-500"
-					}`}
-				/>
 			</View>
 			<View className="flex-1 ml-3">
 				<Text className="text-base font-semibold text-white">{item.username}</Text>
-				<Text className="text-sm text-gray-100 mt-0.5">{item.status}</Text>
 			</View>
 		</View>
 	);
