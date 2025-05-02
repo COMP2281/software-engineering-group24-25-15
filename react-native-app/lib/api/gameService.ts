@@ -59,7 +59,7 @@ export const getQuestions = async (token: string, category: string, n: number = 
 				category: q.category,
 				options: shuffledOptions,
 				correct_answer: q.correct_answer,
-				hint: q.hint,
+				hint: q.hint ? q.hint.trim() : undefined, // Trim the hint to remove whitespace
 			};
 		});
 
@@ -164,10 +164,10 @@ export const updateStatistics = async (token: string, score: number) => {
 			method: "PATCH",
 			headers: {
 				"Content-Type": "application/json",
-				Authorization: `JWT ${token}`,
+				"Authorization": `JWT ${token}`,
 			},
 			body: JSON.stringify({
-				score,
+				score: score, // Ensure parameter name is explicitly 'score'
 			}),
 		});
 

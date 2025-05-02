@@ -86,7 +86,8 @@ export default function Game() {
 							try {
 								const intro = await getAIResponse(token, promptText);
 								if (!mounted) return;
-								introductions.push(intro);
+								// Ensure the response is trimmed
+								introductions.push(intro.trim());
 							} catch (introError) {
 								console.error(`Error fetching introduction for ${topic}:`, introError);
 								introductions.push(getMockIntroduction(topic));
