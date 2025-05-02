@@ -18,7 +18,7 @@ const IntroductionScreen: React.FC<IntroductionScreenProps> = ({ currentRound, t
 			: `Welcome to the ${currentTopic} round! Let's test your knowledge.`;
 
 	return (
-		<ImageBackground source={images.subBackground} className="w-full h-full" resizeMode="cover">
+		<ImageBackground source={images.leaderboardBackground} className="w-full h-full" resizeMode="cover">
 			<View className="flex-1 justify-center p-6">
 				<Text className="text-white text-3xl font-righteous text-center mb-6">
 					Round {safeCurrentRound + 1}: {currentTopic}
@@ -26,10 +26,6 @@ const IntroductionScreen: React.FC<IntroductionScreenProps> = ({ currentRound, t
 
 				<View className="bg-black-200 p-6 rounded-2xl border-2 border-blue-200 mb-8">
 					<Text className="text-white text-xl font-righteous text-center">{introduction}</Text>
-				</View>
-
-				<View className="flex-row justify-center my-6">
-					<Image source={images.profile3} className="w-28 h-28 rounded-full border-2 border-blue-100" />
 				</View>
 
 				<TouchableOpacity onPress={onStart} className="bg-black-100 border-2 border-blue-100 rounded-3xl p-4 mt-6">

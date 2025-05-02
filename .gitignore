@@ -38,3 +38,4 @@ yarn-error.*
 *pyc
 db.sqlite3
 react-native-app/.env
+requests/

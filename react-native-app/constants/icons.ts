@@ -19,6 +19,7 @@ import volume from "@/assets/icons/volume.png";
 import mute from "@/assets/icons/mute.png";
 import search from "@/assets/icons/search.png";
 import mail from "@/assets/icons/mail.png";
+import robot from "@/assets/icons/robot.png";
 
 export default {
 	back,
@@ -42,4 +43,5 @@ export default {
 	mute,
 	search,
 	mail,
+	robot,
 };

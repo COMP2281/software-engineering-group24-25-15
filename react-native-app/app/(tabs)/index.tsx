@@ -33,8 +33,8 @@ export default function Index() {
 				<ImageBackground source={images.mainBackground} className="w-full h-full" resizeMode="cover" />
 				<View className="absolute h-full w-full top-0 flex items-center justify-center pt-32">
 					<View className="w-full h-1/2 flex justify-center items-center">
-						<MenuButton text="Game" onPress={() => router.push("/game")} />
-						<MenuButton text="Practice" onPress={() => router.push("/topic-selection")} />
+						<MenuButton text="Game" onPress={() => router.push("/topic-selection")} />
+						<MenuButton text="Practice" onPress={() => router.push("/practice")} />
 					</View>
 				</View>
 			</View>

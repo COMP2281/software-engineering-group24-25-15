@@ -29,20 +29,12 @@ export const Logo = ({ height }: { height?: string }) => (
 	</View>
 );
 
-export const Timer = ({ time }: { time: number }) => {
-	const [currentTime, setCurrentTime] = useState(time);
-
-	useEffect(() => {
-		const interval = setInterval(() => {
-			setCurrentTime((prevTime) => (prevTime > 0 ? prevTime - 1 : 0));
-		}, 1000);
-
-		return () => clearInterval(interval);
-	}, []);
-
-	return (
-		<View className="absolute top-6 right-6 flex flex-row items-center">
-			<Text className="text-white text-2xl font-bold ml-2">{currentTime}</Text>
-		</View>
-	);
-};
+export const Timer = ({ timeLeft, bgColor }: { timeLeft: number; bgColor?: string }) => (
+	<View
+		className={`absolute top-1/2 right-1/2 translate-x-[50%] z-10 -translate-y-[50%] ${
+			bgColor ? bgColor : "bg-gray-800/70"
+		} px-4 py-2 rounded-full}`}
+	>
+		<Text className="text-white font-righteous text-lg">{timeLeft}</Text>
+	</View>
+);

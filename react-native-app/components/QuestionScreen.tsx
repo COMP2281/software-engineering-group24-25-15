@@ -1,9 +1,11 @@
 import React from "react";
 import { View, Text, ImageBackground, TouchableOpacity, Image, ScrollView } from "react-native";
 import images from "@/constants/images";
+import icons from "@/constants/icons";
 import { Question } from "@/lib/api/gameService";
-import { bots } from "@/constants/data";
+import { Timer } from "@/components/Utilities";
 import TypewriterText from "./TypewriterText";
+import { useState, useEffect } from "react";
 
 type QuestionScreenProps = {
 	currentRound: number;
@@ -21,6 +23,16 @@ type QuestionScreenProps = {
 	onExit: () => void;
 };
 
+const BotProfile = ({ tintColor, answered }: { tintColor: string; answered: boolean }) => (
+	<View
+		className={`flex-col items-center justify-center p-4 bg-gray-800/70 border-2 ${
+			answered ? "border-green-400" : "border-blue-200"
+		} rounded-full`}
+	>
+		<Image source={icons.robot} className="size-16" tintColor={tintColor} />
+	</View>
+);
+
 const QuestionScreen: React.FC<QuestionScreenProps> = ({
 	currentRound,
 	currentQuestionIndex,
@@ -36,120 +48,80 @@ const QuestionScreen: React.FC<QuestionScreenProps> = ({
 	onElimination,
 	onExit,
 }) => {
+	// State to track if the bots have answered
+	const [botAnswers, setBotAnswers] = useState([false, false, false]);
+
+	useEffect(() => {
+		// Set a random timeout for each bot to change its answered state
+		const timeouts = botAnswers.map(
+			(_, index) =>
+				setTimeout(() => {
+					setBotAnswers((prev) => {
+						const updated = [...prev];
+						updated[index] = true;
+						return updated;
+					});
+				}, Math.random() * (timeLeft * 1000 - 2000)) // Random time before timeLeft hits zero
+		);
+
+		// Cleanup timeouts on unmount or when timeLeft changes
+		return () => timeouts.forEach((timeout) => clearTimeout(timeout));
+	}, [timeLeft]);
 	// Get host message based on time left
-	const hostMessage = timeLeft < 5 
-		? "Hurry up! Time's almost out!" 
-		: currentQuestion 
-			? "Choose the correct answer!" 
-			: "Loading question...";
+	const hostMessage = timeLeft < 5 ? "Hurry up! Time's almost out!" : currentQuestion ? "Choose the correct answer!" : "Loading question...";
 
 	return (
-		<ImageBackground source={images.subBackground} className="w-full h-full" resizeMode="cover">
-			<View className="flex-1 justify-between p-6">
-				{/* Top Section with fixed height to prevent movement */}
-				<View style={{ height: 200 }}>
+		<ImageBackground source={images.leaderboardBackground} className="w-full h-full" resizeMode="cover">
+			<View className="flex-col justify-center items-center px-6 py-2 w-full h-full">
+				<View className="flex-1 justify-between">
 					{/* Header and Timer */}
-					<View className="flex-row items-center justify-between mt-6">
+					<View className="flex-row items-center justify-between mt-2">
 						<TouchableOpacity onPress={onExit}>
-							<Text className="text-white text-xl font-righteous">Exit</Text>
+							<Image source={icons.back} className="size-10" tintColor={"#fff"} />
 						</TouchableOpacity>
-						<Text className="text-white text-xl font-righteous">Time: {timeLeft}s</Text>
+						<Timer timeLeft={timeLeft} bgColor="bg-transparent" />
 					</View>
 
 					{/* Round and Score Display */}
-					<View className="flex-row justify-between items-center mt-2">
+					<View className="flex-row justify-between items-center px-10 py-2 bg-gray-600/20 rounded-full">
 						<Text className="text-white text-xl font-righteous">
 							Round {currentRound + 1}/{Array.isArray(topics) ? topics.length : 0}
 						</Text>
-						<Text className="text-white text-lg font-righteous">
-							Question {currentQuestionIndex + 1}/3
-						</Text>
+						<Text className="text-white text-lg font-righteous">Question {currentQuestionIndex + 1}/3</Text>
 						<Text className="text-white text-xl font-righteous">Score: {totalScore}</Text>
 					</View>
 
-					{/* Question display with larger height and visible scrollbar */}
-					<View className="mt-3 bg-black-200 rounded-2xl border-2 border-blue-200" style={{ height: 120 }}>
-						<ScrollView 
-							contentContainerStyle={{ padding: 16 }}
-							showsVerticalScrollIndicator={true} // Changed to true to show scrollbar
-							indicatorStyle="white" // White scrollbar indicator
-						>
-							<Text className="text-white text-lg font-righteous">
-								{currentQuestion?.question || "Loading question..."}
-							</Text>
-						</ScrollView>
-					</View>
-				</View>
-
-				{/* Middle Section: Host and players with fixed height and positions */}
-				<View style={{ height: 320 }} className="my-1">
-					{/* Use an absolute container so we can position each image precisely */}
-					<View className="absolute w-full h-full">
-						{/* Top row: Two players slightly higher - Increased size */}
-						{/* Middle Left */}
-						<View style={{ position: 'absolute', top: '5%', left: '28%' }}>
-							<Image 
-								source={bots[0]?.image || images.profile1} 
-								className="w-20 h-20 rounded-full border-2 border-blue-100" // Increased from 16 to 20
-							/>
-						</View>
-						{/* Middle Right */}
-						<View style={{ position: 'absolute', top: '5%', right: '28%' }}>
-							<Image 
-								source={bots[1]?.image || images.profile2} 
-								className="w-20 h-20 rounded-full border-2 border-blue-100" // Increased from 16 to 20
-							/>
-						</View>
-
-						{/* Second row: Two players slightly lower and further to the left/right */}
-						{/* Lower Left */}
-						<View style={{ position: 'absolute', top: '15%', left: '8%' }}>
-							<Image 
-								source={bots[2]?.image || images.profile3} 
-								className="w-20 h-20 rounded-full border-2 border-blue-100" // Increased from 16 to 20
-							/>
-						</View>
-						{/* Lower Right */}
-						<View style={{ position: 'absolute', top: '15%', right: '8%' }}>
-							<Image 
-								source={images.profile1} 
-								className="w-20 h-20 rounded-full border-2 border-blue-300" // Increased from 16 to 20
-							/>
-						</View>
-
-						{/* Host in the center - fixed proper centering */}
-						<View style={{ 
-							position: 'absolute',
-							left: '50%',
-							top: '50%',
-							transform: [{ translateX: -72 }, { translateY: -72 }]
-						}}>
-							<Image 
-								source={images.profile3} 
-								className="w-36 h-36 rounded-full border-2 border-blue-100" 
-							/>
+					<View className="flex flex-row justify-center items-center w-full h-48">
+						<Image source={images.aiHostSmall} className="pr-4" />
+						<View className="flex-1 justify-center items-center bg-grey-200/30 py-4 px-6 rounded-3xl border border-blue-200 h-full">
+							<ScrollView
+								contentContainerClassName=""
+								showsVerticalScrollIndicator={true} // Changed to true to show scrollbar
+								indicatorStyle="white" // White scrollbar indicator
+							>
+								<Text className="text-white text-lg font-righteous">{currentQuestion?.question || "Loading question..."}</Text>
+							</ScrollView>
 						</View>
 					</View>
 
 					{/* Host message bubble at bottom, not overlapping host */}
-					<View className="absolute bottom-0 left-0 right-0">
-						<View 
-							className="bg-black-200 p-4 rounded-2xl border-2 border-blue-200 mx-6" 
-							style={{ height: 60, justifyContent: 'center' }}
-						>
-							<TypewriterText 
-								className="text-white text-lg font-righteous text-center" 
-								text={hostMessage} 
-								speed={40}
-							/>
+					<View className="">
+						<View className="p-4 rounded-full bg-gray-800/70">
+							<TypewriterText className="text-white text-lg font-righteous text-center" text={hostMessage} speed={40} />
 						</View>
+					</View>
+
+					<View className="flex-row justify-between items-center mt-2 px-10 py-2">
+						<BotProfile tintColor={""} answered={botAnswers[0]} />
+						<BotProfile tintColor={""} answered={botAnswers[1]} />
+						<BotProfile tintColor={""} answered={botAnswers[2]} />
 					</View>
 				</View>
 
-				{/* Bottom Section: Answer buttons with visible scrollbar */}
-				<View style={{ height: 250 }} className="mt-1">
-					{/* Answer options with consistent height and visible scrollbar */}
-					<ScrollView 
+				<View className="flex-col w-full justify-between items-center mt-3 h-1/3">
+					<ScrollView
+						className="w-full"
+						contentContainerClassName="w-full"
 						showsVerticalScrollIndicator={true} // Changed to true to show scrollbar
 						indicatorStyle="white" // White scrollbar indicator
 					>
@@ -165,16 +137,10 @@ const QuestionScreen: React.FC<QuestionScreenProps> = ({
 										key={index}
 										onPress={() => !isEliminated && option && onAnswer(option)}
 										disabled={isEliminated}
-										className={`bg-black-100 border-2 border-blue-100 rounded-3xl mb-2 ${isEliminated ? "opacity-50" : ""}`}
-										style={{ height: 54, justifyContent: 'center' }}
+										className={`w-full border-2 border-blue-100 rounded-3xl mb-2 py-4 px-4 ${isEliminated ? "opacity-50" : ""}`}
 									>
-										{/* Center text and make it larger */}
-										<View className="flex items-center justify-center px-3">
-											<Text 
-												className="text-grey-200 text-center font-righteous" 
-												style={{ fontSize: 18 }}
-												numberOfLines={2}
-											>
+										<View className="flex items-center justify-center px-3 w-full">
+											<Text className="text-grey-200 text-center font-righteous" style={{ fontSize: 18 }} numberOfLines={2}>
 												{option || `Option ${index + 1}`}
 											</Text>
 										</View>
@@ -182,26 +148,29 @@ const QuestionScreen: React.FC<QuestionScreenProps> = ({
 								);
 							})}
 					</ScrollView>
-
-					{/* Extra Buttons Row */}
-					<View className="flex-row justify-between mt-2">
-						<TouchableOpacity
-							onPress={onHint}
-							disabled={hintUsed}
-							className={`bg-black-100 border-2 border-blue-100 rounded-3xl flex-1 mr-2 ${hintUsed ? "opacity-50" : ""}`}
-							style={{ height: 50, justifyContent: 'center' }}
-						>
-							<Text className="text-grey-200 text-center font-righteous" style={{ fontSize: 18 }}>Hint</Text>
-						</TouchableOpacity>
-						<TouchableOpacity
-							onPress={onElimination}
-							disabled={eliminationUsed}
-							className={`bg-black-100 border-2 border-blue-100 rounded-3xl flex-1 ml-2 ${eliminationUsed ? "opacity-50" : ""}`}
-							style={{ height: 50, justifyContent: 'center' }}
-						>
-							<Text className="text-grey-200 text-center font-righteous" style={{ fontSize: 18 }}>50/50</Text>
-						</TouchableOpacity>
-					</View>
+				</View>
+				{/* Extra Buttons Row */}
+				<View className="flex-row justify-between mt-2">
+					<TouchableOpacity
+						onPress={onHint}
+						disabled={hintUsed}
+						className={`border-2 border-blue-100 rounded-3xl flex-1 mr-2 ${hintUsed ? "opacity-50" : ""}`}
+						style={{ height: 50, justifyContent: "center" }}
+					>
+						<Text className="text-grey-200 text-center font-righteous" style={{ fontSize: 18 }}>
+							Hint
+						</Text>
+					</TouchableOpacity>
+					<TouchableOpacity
+						onPress={onElimination}
+						disabled={eliminationUsed}
+						className={`border-2 border-blue-100 rounded-3xl flex-1 ml-2 ${eliminationUsed ? "opacity-50" : ""}`}
+						style={{ height: 50, justifyContent: "center" }}
+					>
+						<Text className="text-grey-200 text-center font-righteous" style={{ fontSize: 18 }}>
+							50/50
+						</Text>
+					</TouchableOpacity>
 				</View>
 			</View>
 		</ImageBackground>

@@ -33,7 +33,7 @@ const GameSummaryScreen: React.FC<GameSummaryScreenProps> = ({ totalScore, corre
 	const totalQuestions = safeTopicsLength * 3;
 
 	return (
-		<ImageBackground source={images.subBackground} className="w-full h-full" resizeMode="cover">
+		<ImageBackground source={images.leaderboardBackground} className="w-full h-full" resizeMode="cover">
 			<View className="flex-1 justify-center p-6">
 				<Text className="text-white text-3xl font-righteous text-center mb-6">Game Complete</Text>
 

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { View, Text, TouchableOpacity, ImageBackground } from "react-native";
 import { router, Redirect } from "expo-router";
-import { Audio } from 'expo-av';
+import { Audio } from "expo-av";
 import images from "@/constants/images";
 import { useAuth } from "@/lib/auth/authContext";
 import { topics } from "@/constants/data";
@@ -49,7 +49,7 @@ export default function TopicSelection() {
 		if (selectedTopics.length > 0) {
 			// Navigate to difficulty selection with selected topics
 			router.push({
-				pathname: "/practice",
+				pathname: "/game",
 				params: { topics: JSON.stringify(selectedTopics) },
 			});
 		}
@@ -58,7 +58,7 @@ export default function TopicSelection() {
 	const playButtonClickSound = async () => {
 		try {
 			const sound = new Audio.Sound();
-			await sound.loadAsync(require("../../assets/audio/button_click.mp3")); 
+			await sound.loadAsync(require("../../assets/audio/button_click.mp3"));
 			await sound.playAsync();
 		} catch (error) {
 			console.error("Error playing button click sound", error);

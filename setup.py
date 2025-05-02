@@ -24,7 +24,7 @@ def run_react_native():
     
     if os.name == "nt":
         # For Windows - Use `start` to open a new command prompt
-        subprocess.Popen(f'start cmd.exe /k "cd {react_native_path} && npm install && npx expo start"', shell=True)
+        subprocess.Popen(f'start cmd.exe /k "cd {react_native_path} && npm install && npx expo start --lan -c"', shell=True)
     else:
         # For MacOS and Linux - Use `open` or `gnome-terminal`
         terminal_cmd = f'cd {react_native_path} && npm install && npx expo start'
