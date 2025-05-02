@@ -48,7 +48,7 @@ const SignIn = () => {
 			const response = await loginUser({ username, password });
 
 			// Store tokens and username in the global context
-			await login(response.access, response.refresh, response.username);
+			await login(response.access, response.refresh, response.username, response.id);
 
 			// Navigation is handled by the index page which will redirect based on auth state
 			router.replace("/");

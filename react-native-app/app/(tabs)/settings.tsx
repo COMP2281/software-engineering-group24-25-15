@@ -32,8 +32,10 @@ const SettingsItem = ({ icon, title, onPress, textStyle, showArrow = true, tintC
 };
 
 const Settings = () => {
-	const { logout, username } = useAuth();
+	const { logout, username, userId } = useAuth();
 	const [muted, setMuted] = useState(AudioManager.getMuted());
+
+	console.log(userId);
 
 	const handleLogout = () => {
 		logout();
@@ -54,13 +56,14 @@ const Settings = () => {
 				</View>
 
 				<ScrollView showsHorizontalScrollIndicator={false}>
-					<View className="flex-row justify-center flex mb-3">
+					<View className="flex-row justify-center flex">
 						<View className="flex-col flex items-center relative mt-5">
 							<Image source={images.profile1} className="size-44 relative rounded-full" />
-							<TouchableOpacity className="absolute bottom-11 right-2">
+							<TouchableOpacity className="absolute bottom-20 right-2">
 								<Image source={icons.edit} className="size-9" />
 							</TouchableOpacity>
 							<Text className="text-2xl font-righteous text-white mt-2">{username}</Text>
+							<Text className="text-2xl font-righteous text-gray-500 mt-2">{userId}</Text>
 						</View>
 					</View>
 					<View className="flex flex-col mt-5 border-t pt-5 border-white">

@@ -7,6 +7,7 @@ export interface LoginResponse {
 	access: string;
 	refresh: string;
 	username: string;
+	id: number;
 }
 
 export interface ApiError {
@@ -41,11 +42,14 @@ export const loginUser = async (userData: LoginUserData): Promise<LoginResponse>
 			);
 		}
 
+		const id = await findUserId(userData.username, data.access);
+
 		// Return tokens along with the username that was used to log in
 		return {
 			access: data.access,
 			refresh: data.refresh,
 			username: userData.username,
+			id: id,
 		};
 	} catch (error) {
 		console.error("Login fetch error:", error);
@@ -53,6 +57,30 @@ export const loginUser = async (userData: LoginUserData): Promise<LoginResponse>
 			throw new Error(`Network request failed. Please check if the API server is running and accessible at ${API_URL}`);
 		}
 		throw error;
+	}
+};
+
+const findUserId = async (username: string, token: string): Promise<number> => {
+	try {
+		const response = await fetch(`${API_URL}/accounts/retrieve-user/`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `JWT ${token}`,
+			},
+			body: JSON.stringify({ username }),
+		});
+
+		if (response.ok) {
+			const data = await response.json();
+			return data.id;
+		} else {
+			console.error("Failed to find user ID:", response.statusText);
+			return 0;
+		}
+	} catch (error) {
+		console.error("Error finding user ID:", error);
+		return 0;
 	}
 };
 
